@@ -199,7 +199,7 @@ if (!class_exists('WeDevs_Settings_API')):
 
             $type = isset($args['type']) ? $args['type'] : 'text';
 
-            $html = sprintf('<input type="%1$s" class="timepicker"  name="%2$s[%3$s][opening]" value="%4$s"/>', $type, $args['section'], $args['id'], $value['opening']);
+            $html = sprintf('<input type="%1$s" class="timepicker"  name="%2$s[][%3$s][opening]" value="%4$s"/>', $type, $args['section'], $args['id'], $value['opening']);
 
             $html .= sprintf('<input type="%1$s" class="timepicker" name="%2$s[%3$s][ending]" value="%4$s"/>', $type, $args['section'], $args['id'], $value['ending']);
 
@@ -207,6 +207,68 @@ if (!class_exists('WeDevs_Settings_API')):
 
             echo $html;
         }
+
+
+        /**
+         * Displays a text field for a settings field
+         *
+         * @param array $args settings field args
+         */
+        function callback_exception($args)
+        {
+
+            $exceptions_result = get_option('cbx_opening_hours_settings');
+
+            if (!is_array($exceptions_result)) $exceptions_result = array();
+
+            $exceptions = isset($exceptions_result['exception']) ? $exceptions_result['exception'] : array();
+
+            $ex_last_count = $exceptions_result['ex_last_count'];
+
+
+
+            ?>
+            <div class="main_wrapper">
+                <div class="ex_wrapper">
+                    <?php
+                    if (is_array($exceptions) && sizeof($exceptions) > 0) {
+                        foreach ($exceptions as $key => $exception) {
+
+
+
+                            ?>
+                            <p class='exception'>
+
+                                <input type='text' class="date"
+                                       name="cbx_opening_hours_settings[exception][<?= esc_attr($key); ?>][ex_date]"
+                                       value="<?php echo esc_attr($exception['ex_date']); ?>" >
+
+                                <input type='text'
+                                       name='cbx_opening_hours_settings[exception][<?= esc_attr($key); ?>][ex_start]'
+                                       value="<?php echo esc_attr($exception['ex_start']); ?>">
+
+                                <input type='text'
+                                       name='cbx_opening_hours_settings[exception][<?= esc_attr($key); ?>][ex_end]'
+                                       value="<?php echo esc_attr($exception['ex_end']); ?>">
+
+                                <input type='text'
+                                       name='cbx_opening_hours_settings[exception][<?= esc_attr($key); ?>][ex_subject]'
+                                       value="<?php echo esc_attr($exception['ex_subject']); ?>">
+
+                                <a id='remove_exception'> <?= esc_html__('Remove','cbx_opening_hours');?></a>
+                            </p>
+
+                        <?php } // end foreach
+                    } // end if condition
+                    ?>
+                </div>
+                <a class="add_exception">Add new</a>
+                <input type="hidden" class="exception_last_count" name="cbx_opening_hours_settings[ex_last_count]"
+                       value="<?= esc_attr(intval($ex_last_count)); ?>"/>
+            </div>
+            <?php
+        }
+
 
         /**
          * Displays a selectbox for a settings field
@@ -216,12 +278,13 @@ if (!class_exists('WeDevs_Settings_API')):
         function callback_select($args)
         {
 
-            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
+            $value = $this->get_option($args['id'], $args['section']);
+
             $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
             $html = sprintf('<select class="%1$s" name="%2$s[%3$s]" id="%2$s[%3$s]">', $size, $args['section'], $args['id']);
 
             foreach ($args['options'] as $key => $label) {
-                $html .= sprintf('<option value="%s"%s>%s</option>', $key, selected($value, $key, false), $label);
+                $html .= sprintf('<option value="%s"%s>%s</option>', $key, selected(intval($value), $key, false), $label);
             }
 
             $html .= sprintf('</select>');
@@ -474,3 +537,18 @@ if (!class_exists('WeDevs_Settings_API')):
     }
 
 endif;
+
+
+
+/*$html = sprintf('<input type="%1$s" class="timepicker"  name="%2$s[%3$s][date]" value="%4$s" placeholder="date" />', $type, $args['section'], $args['id'], $value['opening']);
+
+            $html .= sprintf('<input type="%1$s" class="timepicker" name="%2$s[%3$s][start]" value="%4$s" placeholder="start" />', $type, $args['section'], $args['id'], $value['ending']);
+
+            $html .= sprintf('<input type="%1$s" class="timepicker" name="%2$s[%3$s][end]" value="%4$s" placeholder="end" />', $type, $args['section'], $args['id'], $value['ending']);
+
+            $html .= sprintf('<input type="%1$s" class="timepicker" name="%2$s[%3$s][subject]" value="%4$s" placeholder="subject" />', $type, $args['section'], $args['id'], $value['ending']);
+
+            //$html .= $this->get_field_description($args);
+
+
+            */

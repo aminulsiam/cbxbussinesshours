@@ -78,6 +78,8 @@ class Cbx_opening_hours_Admin
 
         wp_enqueue_style('cbx_opening_hours_chosen', plugin_dir_url(__FILE__) . '../assets/css/jquery.chosen.min.css', array(), time(), 'all');
 
+        wp_enqueue_style('cbx_opening_hours_date', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', array(), time(), 'all');
+
     }
 
     /**
@@ -97,6 +99,8 @@ class Cbx_opening_hours_Admin
         wp_enqueue_script('cbx_opening_hours_js-timepicker', plugin_dir_url(__FILE__) . '../assets/js/jquery.timepicker.min.js', array('jquery'), time(), true);
 
         wp_enqueue_script('cbx_opening_hours_js-chosen', plugin_dir_url(__FILE__) . '../assets/js/chosen.jquery.min.js', array('jquery'), time(), true);
+
+        wp_enqueue_script('cbx_opening_hours_js-date', 'https://code.jquery.com/ui/1.12.1/jquery-ui.js', array('jquery'), time(), true);
 
     }
 
@@ -125,7 +129,7 @@ class Cbx_opening_hours_Admin
         $sections = array(
             array(
                 'id' => 'cbx_opening_hours',
-                'title' => __('Opening and Ending hours', 'cbx_opening_hours')
+                'title' => __('Manage bussiness hours', 'cbx_opening_hours')
             ),
             array(
                 'id' => 'cbx_opening_hours_settings',
@@ -202,6 +206,15 @@ class Cbx_opening_hours_Admin
                         '1' => 'Compact'
                     )
                 ),
+
+                array(
+                    'name' => 'exception',
+                    'label' => __('Exception', 'cbx_opening_hours'),
+                    'placeholder' => __('exceptional day', 'cbx_opening_hours'),
+                    'type' => 'exception',
+                ),
+
+
             ),
 
         );
