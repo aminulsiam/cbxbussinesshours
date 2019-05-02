@@ -122,7 +122,7 @@ class Cbx_opening_hours {
         /**
          * This class responsible for plugin setting
          */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class.settings-api.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-opening_hours_settings_api.php';
 
 
         /**

@@ -2,56 +2,72 @@
 
     $(document).ready(function () {
 
-        // timepicker
-        $('.timepicker').timepicker({
-            timeFormat: 'H:mm',
-            interval: 15,
-            minTime: '10',
-            maxTime: '6:00pm',
-            startTime: '00:00',
-            dropdown: true,
-            scrollbar: true
-        });
+        /**
+         *  @timepicker function
+         */
+        function timepicker() {
+            // timepicker
+            $('.timepicker').timepicker({
+                timeFormat: 'H:mm',
+                interval: 15,
+                minTime: '10',
+                maxTime: '6:00pm',
+                startTime: '00:00',
+                dropdown: true,
+                scrollbar: true
+            });
+        }
+
+        /**
+         * @datepicker function
+         */
+        function datepicker() {
+            // date picker
+            $(".date").datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+        }
+
 
         // exceptional field added
-        $(".main_wrapper").on('click', '.add_exception', function (e) {
+        $(".ex_wrapper").on('click', '.add_exception', function (e) {
             e.preventDefault();
 
-            var $main_wrapper = $(".main_wrapper");
-            var $ex_wrapper = $(".ex_wrapper");
+            var $this = $(this);
 
-            var $ex_last_count = $main_wrapper.find(".exception_last_count");
+            var $ex_wrapper = $this.closest(".ex_wrapper");
+            var $ex_items = $ex_wrapper.find(".ex_items");
 
+            var $ex_last_count = $ex_wrapper.find('.exception_last_count');
             var $ex_last_count_val = parseInt($ex_last_count.val());
 
             $ex_last_count_val++;
 
             $ex_last_count.val($ex_last_count_val);
 
-            var field = "<p class='exception'>" +
-                "<input type='text' autocomplete='off' name='cbx_opening_hours_settings[exception][" + $ex_last_count_val + "][ex_date]' placeholder='date' class='date' />" +
-                " <input type='text' name='cbx_opening_hours_settings[exception][" + $ex_last_count_val + "][ex_start]' placeholder='start' />" +
-                " <input type='text' name='cbx_opening_hours_settings[exception][" + $ex_last_count_val + "][ex_end]' placeholder='end'  />" +
-                " <input type='text' name='cbx_opening_hours_settings[exception][" + $ex_last_count_val + "][ex_subject]' placeholder='subject' />" +
-                "<a class='remove_exception'> Remove</a>" +
+            var field = "<p class='ex_item'>" +
+                "<input type='text' required autocomplete='off' name='cbx_opening_hours[exception][" + $ex_last_count_val + "][ex_date]' placeholder='" + translation['date'] + "' class='date'/>" +
+                " <input type='text' class='timepicker' autocomplete='off' name='cbx_opening_hours[exception][" + $ex_last_count_val + "][ex_start]' placeholder='" + translation['start'] + "' />" +
+                " <input type='text' class='timepicker' autocomplete='off' name='cbx_opening_hours[exception][" + $ex_last_count_val + "][ex_end]' placeholder='" + translation['end'] + "'  />" +
+                " <input type='text' autocomplete='off' name='cbx_opening_hours[exception][" + $ex_last_count_val + "][ex_subject]' placeholder='" + translation['subject'] + "' />" +
+                "<a class='remove_exception'> " + translation['remove'] + " </a>" +
                 "</p>";
 
-            $main_wrapper.find($ex_wrapper).append(field);
+            $ex_wrapper.find($ex_items).append(field);
+
+            timepicker();
+            datepicker();
+
 
         }); // end exceptional field
 
         // Remove field
-        $(".main_wrapper").on('click', '.remove_exception', function (e) {
+        $(".ex_wrapper").on('click', '.remove_exception', function (e) {
             e.preventDefault();
-            $(this).closest(".exception").remove();
-        });
 
+            var $this = $(this);
 
-        /**
-         *  @datepicker added
-         */
-        $(".main_wrapper").find('.date').datepicker({
-            dateFormat: 'yy-mm-dd'
+            $this.closest(".ex_item").remove();
         });
 
 

@@ -102,6 +102,17 @@ class Cbx_opening_hours_Admin
 
         wp_enqueue_script('cbx_opening_hours_js-date', 'https://code.jquery.com/ui/1.12.1/jquery-ui.js', array('jquery'), time(), true);
 
+        // Localize the script with new data
+        $translation_string = array(
+            'remove' => __('Remove', 'cbx_opening_hours'),
+            'date' => __('date', 'cbx_opening_hours'),
+            'start' => __('start', 'cbx_opening_hours'),
+            'end' => __('end', 'cbx_opening_hours'),
+            'subject' => __('subject', 'cbx_opening_hours'),
+        );
+
+        wp_localize_script('cbx_opening_hours_js', 'translation', $translation_string);
+
     }
 
     /**
@@ -193,6 +204,13 @@ class Cbx_opening_hours_Admin
                     'type' => 'text'
                 ),
 
+                array(
+                    'name' => 'exception',
+                    'label' => __('Exception', 'cbx_opening_hours'),
+                    'placeholder' => __('exceptional day', 'cbx_opening_hours'),
+                    'type' => 'exception',
+                ),
+
             ),
 
             'cbx_opening_hours_settings' => array(
@@ -207,12 +225,12 @@ class Cbx_opening_hours_Admin
                     )
                 ),
 
-                array(
+                /*array(
                     'name' => 'exception',
                     'label' => __('Exception', 'cbx_opening_hours'),
                     'placeholder' => __('exceptional day', 'cbx_opening_hours'),
                     'type' => 'exception',
-                ),
+                ),*/
 
 
             ),

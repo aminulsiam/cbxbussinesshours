@@ -19,10 +19,12 @@ if (!class_exists('CBXOpeningHours')) {
         {
             $optionValue = get_option('cbx_opening_hours');
 
-            $exception_value = get_option('cbx_opening_hours_settings');
+            $exception_days = get_option('cbx_opening_hours_settings');
 
-           // write_log($exception_value);
 
+            if(!is_array($exception_days)) $exception_days = array();
+
+            $exception_day = isset($exception_days['exception']) ? $exception_days['exception'] : array();
 
             $starting_time = array_column($optionValue, 'opening');
             $ending_time = array_column($optionValue, 'ending');
@@ -71,8 +73,18 @@ if (!class_exists('CBXOpeningHours')) {
                         $end = $dow[$end][$key];
 
                         $day_text = $day_text . ' - ' . $end;
+
                     }
                     if (!empty($starting_time[$os[0]]) && !($starting_time[$os[0]] == '0:00' && $ending_time[$os[0]] == '0:00')) {
+                        //empty($exception['ex_start']) && empty($exception['ex_end']
+
+                        foreach ($exception_day as $exception){
+                            if (!empty($exception['ex_date'])){
+                                $date = $exception['ex_date'];
+                                $day = date('l', strtotime($date));
+                            }
+                        }
+
                         $hours_text = $starting_time[$os[0]] . ' - ' . $ending_time[$os[0]];
                     } else {
                         $hours_text = '<span style="color: red">' . esc_html__('Closed', 'cbx_opening_hours') . '</span>';
