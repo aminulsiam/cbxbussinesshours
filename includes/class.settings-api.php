@@ -223,8 +223,7 @@ if (!class_exists('WeDevs_Settings_API')):
 
             $exceptions = isset($exceptions_result['exception']) ? $exceptions_result['exception'] : array();
 
-            $ex_last_count = $exceptions_result['ex_last_count'];
-
+            $ex_last_count = isset($exceptions_result['ex_last_count']) ? intval($exceptions_result['ex_last_count']) : 0;
 
 
             ?>
@@ -235,13 +234,16 @@ if (!class_exists('WeDevs_Settings_API')):
                         foreach ($exceptions as $key => $exception) {
 
 
+                            $date = $exception['ex_date'];
+                            $day = date('l', strtotime($date));
+                            //echo $day;
 
                             ?>
                             <p class='exception'>
 
                                 <input type='text' class="date"
                                        name="cbx_opening_hours_settings[exception][<?= esc_attr($key); ?>][ex_date]"
-                                       value="<?php echo esc_attr($exception['ex_date']); ?>" >
+                                       value="<?php echo esc_attr($exception['ex_date']); ?>">
 
                                 <input type='text'
                                        name='cbx_opening_hours_settings[exception][<?= esc_attr($key); ?>][ex_start]'
@@ -255,14 +257,14 @@ if (!class_exists('WeDevs_Settings_API')):
                                        name='cbx_opening_hours_settings[exception][<?= esc_attr($key); ?>][ex_subject]'
                                        value="<?php echo esc_attr($exception['ex_subject']); ?>">
 
-                                <a id='remove_exception'> <?= esc_html__('Remove','cbx_opening_hours');?></a>
+                                <a class='remove_exception'> <?= esc_html__('Remove', 'cbx_opening_hours'); ?></a>
                             </p>
 
                         <?php } // end foreach
                     } // end if condition
                     ?>
                 </div>
-                <a class="add_exception">Add new</a>
+                <a class="add_exception"><?= esc_html__('Add new','cbx_opening_hours');?></a>
                 <input type="hidden" class="exception_last_count" name="cbx_opening_hours_settings[ex_last_count]"
                        value="<?= esc_attr(intval($ex_last_count)); ?>"/>
             </div>

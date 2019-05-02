@@ -19,6 +19,11 @@ if (!class_exists('CBXOpeningHours')) {
         {
             $optionValue = get_option('cbx_opening_hours');
 
+            $exception_value = get_option('cbx_opening_hours_settings');
+
+           // write_log($exception_value);
+
+
             $starting_time = array_column($optionValue, 'opening');
             $ending_time = array_column($optionValue, 'ending');
 
@@ -36,6 +41,7 @@ if (!class_exists('CBXOpeningHours')) {
 
             $key = (false) ? 'short' : 'long';
             if ($starting_time && $ending_time) {
+
                 $opening_short = array();
                 for ($i = 0; $i < 7; $i++) {
                     $temp = array($i);
