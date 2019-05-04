@@ -8,10 +8,9 @@
  * @author Tareq Hasan <tareq@weDevs.com>
  * @link https://tareq.co Tareq Hasan
  * @example example/oop-example.php How to use the class
- *
  */
-if (!class_exists('WeDevs_Settings_API')):
-    class WeDevs_Settings_API
+if (!class_exists('CBXBusinessHoursSettings')):
+    class CBXBusinessHoursSettings
     {
 
         /**
@@ -74,14 +73,14 @@ if (!class_exists('WeDevs_Settings_API')):
          *
          * @param array $fields settings fields array
          */
-        function set_fields($fields)
+        public function set_fields($fields)
         {
             $this->settings_fields = $fields;
 
             return $this;
         }
 
-        function add_field($section, $field)
+        public function add_field($section, $field)
         {
             $defaults = array(
                 'name' => '',
@@ -96,6 +95,11 @@ if (!class_exists('WeDevs_Settings_API')):
             return $this;
         }
 
+        public function office_hours_form()
+        { ?>
+            <div></div>
+        <?php }
+
         /**
          * Initialize and registers the settings sections and fileds to WordPress
          *
@@ -106,7 +110,6 @@ if (!class_exists('WeDevs_Settings_API')):
          */
         function admin_init()
         {
-
             //register settings sections
             foreach ($this->settings_sections as $section) {
                 if (false == get_option($section['id'])) {
@@ -127,7 +130,6 @@ if (!class_exists('WeDevs_Settings_API')):
                 add_settings_section($section['id'], $section['title'], $callback, $section['id']);
             }
 
-
             //register settings fields
             foreach ($this->settings_fields as $section => $field) {
                 foreach ($field as $option) {
@@ -137,7 +139,7 @@ if (!class_exists('WeDevs_Settings_API')):
                     $label = isset($option['label']) ? $option['label'] : '';
                     $callback = isset($option['callback']) ? $option['callback'] : array($this, 'callback_' . $type);
 
-                    $args = array(
+                    $args = [
                         'id' => $name,
                         'class' => isset($option['class']) ? $option['class'] : $name,
                         'label_for' => "{$section}[{$name}]",
@@ -153,7 +155,7 @@ if (!class_exists('WeDevs_Settings_API')):
                         'min' => isset($option['min']) ? $option['min'] : '',
                         'max' => isset($option['max']) ? $option['max'] : '',
                         'step' => isset($option['step']) ? $option['step'] : '',
-                    );
+                    ];
 
                     add_settings_field("{$section}[{$name}]", $label, $callback, $section, $section, $args);
                 }
@@ -188,73 +190,216 @@ if (!class_exists('WeDevs_Settings_API')):
          */
         function callback_text($args)
         {
-
-            $value = $this->get_option($args['id'], $args['section']);
-
-            if (!is_array($value)) {
-                $value = array();
-                $value['opening'] = "";
-                $value['ending'] = "";
-            };
-
+            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
+            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
             $type = isset($args['type']) ? $args['type'] : 'text';
-
-            $html = sprintf('<input type="%1$s" class="timepicker"  name="%2$s[%3$s][opening]" value="%4$s"/>', $type, $args['section'], $args['id'], $value['opening']);
-
-            $html .= sprintf('<input type="%1$s" class="timepicker" name="%2$s[%3$s][ending]" value="%4$s"/>', $type, $args['section'], $args['id'], $value['ending']);
-
-            //$html .= $this->get_field_description($args);
-
+            $placeholder = empty($args['placeholder']) ? '' : ' placeholder="' . $args['placeholder'] . '"';
+            $html = sprintf('<input type="%1$s" class="%2$s-text" id="%3$s[%4$s]" name="%3$s[%4$s]" value="%5$s"%6$s/>', $type, $size, $args['section'], $args['id'], $value, $placeholder);
+            $html .= $this->get_field_description($args);
             echo $html;
         }
-
 
         /**
          * Displays a text field for a settings field
          *
          * @param array $args settings field args
          */
-        function callback_exception($args)
+        function callback_time2($args)
         {
+            $value = $this->get_option($args['id'], $args['section'], $args['std']);
 
-            $exceptions_result = get_option('cbx_opening_hours');
+            if (!is_array($value)) {
+                $value = array();
+                $value['start'] = '';
+                $value['end'] = '';
+            }
 
-            write_log($exceptions_result);
+            if (!isset($value['start'])) $value['start'] = '';
+            if (!isset($value['end'])) $value['end'] = '';
 
+            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
+            $type = isset($args['type']) ? $args['type'] : 'text';
+            //$placeholder = empty( $args['placeholder'] ) ? '' : ' placeholder="' . $args['placeholder'] . '"';
+
+            $html = sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker" id="%3$s[%4$s]-0" name="%3$s[%4$s][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $value['start']);
+
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker" id="%3$s[%4$s]-1" name="%3$s[%4$s][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $value['end']);
+
+
+            $html .= $this->get_field_description($args);
+            echo $html;
+
+        }
+
+        function callback_time3($args)
+        {
+            $value = $this->get_option($args['id'], $args['section'], $args['std']);
+
+            if (!is_array($value)) {
+                $value = array();
+                $value['start'] = '';
+                $value['end'] = '';
+            }
+
+
+            /* if (!isset($value['start'])) $value['start'] = '';
+             if (!isset($value['end'])) $value['end'] = '';*/
+
+            $sunday = isset($value['sunday']['start']) ? $value['sunday']['start'] : "";
+            $monday = isset($value['monday']['start']) ? $value['monday']['start'] : "";
+            $tuesday = isset($value['tuesday']['start']) ? $value['tuesday']['start'] : "";
+            $wednesday = isset($value['wednesday']['start']) ? $value['wednesday']['start'] : "";
+            $thursday = isset($value['thursday']['start']) ? $value['thursday']['start'] : "";
+            $friday = isset($value['friday']['start']) ? $value['friday']['start'] : "";
+            $saturday = isset($value['saturday']['start']) ? $value['saturday']['start'] : "";
+
+
+            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
+            $type = isset($args['type']) ? $args['type'] : 'text';
+
+
+            /**
+             * Input field for sunday
+             */
+            $html = sprintf('<div>');
+            $html .= sprintf('<div class="labels"><label> Sunday : </div></label>');
+            $html .= sprintf('<div class="rightTab">');
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][sunday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $sunday);
+
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][sunday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $sunday);
+            $html .= sprintf('</div>');
+            $html .= sprintf('</div>');
+            /**
+             * Ending
+             */
+
+            /**
+             * Input field for Monday
+             */
+            $html .= sprintf('<div>');
+            $html .= sprintf('<div class="labels"><label> Monday : </div></label>');
+            $html .= sprintf('<div class="rightTab">');
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][monday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $monday);
+
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][monday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $monday);
+            $html .= sprintf('</div>');
+            $html .= sprintf('</div>');
+            /**
+             * Ending
+             */
+
+            /**
+             * Input field for Tuesday
+             */
+            $html .= sprintf('<div>');
+            $html .= sprintf('<div class="labels"><label> Tuesday : </div></label>');
+            $html .= sprintf('<div class="rightTab">');
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][tuesday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $tuesday);
+
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][tuesday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $tuesday);
+            $html .= sprintf('</div>');
+            $html .= sprintf('</div>');
+            /**
+             * Ending
+             */
+
+            /**
+             * Input field for Wednesday
+             */
+            $html .= sprintf('<div>');
+            $html .= sprintf('<div class="labels"><label> Wednesday : </div></label>');
+            $html .= sprintf('<div class="rightTab">');
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][wednesday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $wednesday);
+
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][wednesday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $wednesday);
+            $html .= sprintf('</div>');
+            $html .= sprintf('</div>');
+            /**
+             * Ending
+             */
+
+            /**
+             * Input field for Thursday
+             */
+            $html .= sprintf('<div>');
+            $html .= sprintf('<div class="labels"><label>' . __('Thursday : ', 'cbxbusinesshours') . '</label></div>');
+            $html .= sprintf('<div class="rightTab">');
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][thursday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $thursday);
+
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][thursday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $thursday);
+            $html .= sprintf('</div>');
+            $html .= sprintf('</div>');
+            /**
+             * Ending
+             */
+
+            /**
+             * Input field for Friday
+             */
+            $html .= sprintf('<div>');
+            $html .= sprintf('<div class="labels"><label> Friday : </div></label>');
+            $html .= sprintf('<div class="rightTab">');
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][friday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $friday);
+
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][friday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $friday);
+            $html .= sprintf('</div>');
+            $html .= sprintf('</div>');
+            /**
+             * Ending
+             */
+
+            /**
+             * Input field for Saturday
+             */
+            $html .= sprintf('<div>');
+            $html .= sprintf('<div class="labels"><label> Saturday : </div></label>');
+            $html .= sprintf('<div class="rightTab">');
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][saturday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $saturday);
+
+            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][saturday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $saturday);
+            $html .= sprintf('</div>');
+            $html .= sprintf('</div>');
+            /**
+             * Ending
+             */
+
+            $html .= $this->get_field_description($args);
+            echo $html;
+
+        }// End of time3 method
+
+
+        function callback_exceptionDay($args)
+        {
+            $exceptions_result = get_option('cbxbusinesshours_hours');
             if (!is_array($exceptions_result)) $exceptions_result = array();
-
             $exceptions = isset($exceptions_result['exception']) ? $exceptions_result['exception'] : array();
-
             $ex_last_count = isset($exceptions_result['ex_last_count']) ? intval($exceptions_result['ex_last_count']) : 0;
-
-
             ?>
             <div class="ex_wrapper">
                 <div class="ex_items">
                     <?php
                     if (is_array($exceptions) && sizeof($exceptions) > 0) {
                         foreach ($exceptions as $key => $exception) {
-
                             ?>
                             <p class="ex_item">
 
                                 <input type="text" class="date"
-                                       name="cbx_opening_hours[exception][<?php echo esc_attr($key); ?>][ex_date]"
+                                       name="cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_date]"
                                        value="<?php echo esc_attr($exception['ex_date']) ?>">
 
                                 <input type="text"
-                                       name='cbx_opening_hours[exception][<?php echo esc_attr($key); ?>][ex_start]'                                            value="<?php echo esc_attr($exception['ex_start']) ?>">
+                                       name='cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_start]'
+                                       value="<?php echo esc_attr($exception['ex_start']) ?>">
 
                                 <input type="text"
-                                       name='cbx_opening_hours[exception][<?php echo esc_attr($key); ?>][ex_end]'
+                                       name='cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_end]'
                                        value="<?php echo esc_attr($exception['ex_end']) ?>">
 
                                 <input type="text"
-                                       name="cbx_opening_hours[exception][<?php echo esc_attr($key); ?>][ex_subject]"
+                                       name="cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_subject]"
                                        value="<?php echo esc_attr($exception['ex_subject']) ?>">
 
-                                <input type="hidden" name="cbx_opening_hours[last_count]" class="ex_last_count"
-                                       value="<?php echo esc_attr(intval($ex_last_count));?>">
                                 <a class="remove_exception">
                                     <?php echo esc_html__('Remove', 'cbx_opening_hours'); ?>
                                 </a>
@@ -265,10 +410,21 @@ if (!class_exists('WeDevs_Settings_API')):
                     ?>
                 </div>
                 <a class="add_exception"><?php echo esc_html__('Add new', 'cbx_opening_hours'); ?></a>
-                <input type="hidden" class="exception_last_count" name="cbx_opening_hours[ex_last_count]"
+                <input type="hidden" class="exception_last_count" name="cbxbusinesshours_hours[ex_last_count]"
                        value="<?= esc_attr(intval($ex_last_count)); ?>"/>
             </div>
             <?php
+        } // end of method callback_exceptionDay
+
+
+        /**
+         * Displays a url field for a settings field
+         *
+         * @param array $args settings field args
+         */
+        public function callback_url($args)
+        {
+            $this->callback_text($args);
         }
 
 
@@ -280,13 +436,12 @@ if (!class_exists('WeDevs_Settings_API')):
         function callback_select($args)
         {
 
-            $value = $this->get_option($args['id'], $args['section']);
-
+            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
             $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
             $html = sprintf('<select class="%1$s" name="%2$s[%3$s]" id="%2$s[%3$s]">', $size, $args['section'], $args['id']);
 
             foreach ($args['options'] as $key => $label) {
-                $html .= sprintf('<option value="%s"%s>%s</option>', $key, selected(intval($value), $key, false), $label);
+                $html .= sprintf('<option value="%s"%s>%s</option>', $key, selected($value, $key, false), $label);
             }
 
             $html .= sprintf('</select>');
@@ -295,6 +450,119 @@ if (!class_exists('WeDevs_Settings_API')):
             echo $html;
         }
 
+        /**
+         * Displays the html for a settings field
+         *
+         * @param array $args settings field args
+         * @return string
+         */
+        function callback_html($args)
+        {
+            echo $this->get_field_description($args);
+        }
+
+        /**
+         * Displays a rich text textarea for a settings field
+         *
+         * @param array $args settings field args
+         */
+        function callback_wysiwyg($args)
+        {
+
+            $value = $this->get_option($args['id'], $args['section'], $args['std']);
+            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : '500px';
+
+            echo '<div style="max-width: ' . $size . ';">';
+
+            $editor_settings = array(
+                'teeny' => true,
+                'textarea_name' => $args['section'] . '[' . $args['id'] . ']',
+                'textarea_rows' => 10
+            );
+
+            if (isset($args['options']) && is_array($args['options'])) {
+                $editor_settings = array_merge($editor_settings, $args['options']);
+            }
+
+            wp_editor($value, $args['section'] . '-' . $args['id'], $editor_settings);
+
+            echo '</div>';
+
+            echo $this->get_field_description($args);
+        }
+
+        /**
+         * Displays a file upload field for a settings field
+         *
+         * @param array $args settings field args
+         */
+        function callback_file($args)
+        {
+
+            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
+            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
+            $id = $args['section'] . '[' . $args['id'] . ']';
+            $label = isset($args['options']['button_label']) ? $args['options']['button_label'] : __('Choose File');
+
+            $html = sprintf('<input type="text" class="%1$s-text wpsa-url" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['section'], $args['id'], $value);
+            $html .= '<input type="button" class="button wpsa-browse" value="' . $label . '" />';
+            $html .= $this->get_field_description($args);
+
+            echo $html;
+        }
+
+        /**
+         * Displays a password field for a settings field
+         *
+         * @param array $args settings field args
+         */
+        function callback_password($args)
+        {
+
+            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
+            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
+
+            $html = sprintf('<input type="password" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['section'], $args['id'], $value);
+            $html .= $this->get_field_description($args);
+
+            echo $html;
+        }
+
+        /**
+         * Displays a color picker field for a settings field
+         *
+         * @param array $args settings field args
+         */
+        function callback_color($args)
+        {
+
+            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
+            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
+
+            $html = sprintf('<input type="text" class="%1$s-text wp-color-picker-field" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s" data-default-color="%5$s" />', $size, $args['section'], $args['id'], $value, $args['std']);
+            $html .= $this->get_field_description($args);
+
+            echo $html;
+        }
+
+
+        /**
+         * Displays a select box for creating the pages select box
+         *
+         * @param array $args settings field args
+         */
+        function callback_pages($args)
+        {
+
+            $dropdown_args = array(
+                'selected' => esc_attr($this->get_option($args['id'], $args['section'], $args['std'])),
+                'name' => $args['section'] . '[' . $args['id'] . ']',
+                'id' => $args['section'] . '[' . $args['id'] . ']',
+                'echo' => 0
+            );
+            $html = wp_dropdown_pages($dropdown_args);
+            echo $html;
+        }
 
         /**
          * Sanitize callback for Settings API
@@ -394,7 +662,6 @@ if (!class_exists('WeDevs_Settings_API')):
             echo $html;
         }
 
-
         /**
          * Show the section settings forms
          *
@@ -414,7 +681,7 @@ if (!class_exists('WeDevs_Settings_API')):
                             do_action('wsa_form_bottom_' . $form['id'], $form);
                             if (isset($this->settings_fields[$form['id']])):
                                 ?>
-                                <div style="padding-left: 20px;">
+                                <div style="padding-left: 10px">
                                     <?php submit_button(); ?>
                                 </div>
                             <?php endif; ?>
@@ -442,14 +709,14 @@ if (!class_exists('WeDevs_Settings_API')):
                     // Switches option sections
                     $('.group').hide();
                     var activetab = '';
-                    if (typeof(localStorage) != 'undefined') {
+                    if (typeof (localStorage) != 'undefined') {
                         activetab = localStorage.getItem("activetab");
                     }
 
                     //if url has section id as hash then set it as active or override the current local storage value
                     if (window.location.hash) {
                         activetab = window.location.hash;
-                        if (typeof(localStorage) != 'undefined') {
+                        if (typeof (localStorage) != 'undefined') {
                             localStorage.setItem("activetab", activetab);
                         }
                     }
@@ -472,15 +739,14 @@ if (!class_exists('WeDevs_Settings_API')):
 
                     if (activetab != '' && $(activetab + '-tab').length) {
                         $(activetab + '-tab').addClass('nav-tab-active');
-                    }
-                    else {
+                    } else {
                         $('.nav-tab-wrapper a:first').addClass('nav-tab-active');
                     }
                     $('.nav-tab-wrapper a').click(function (evt) {
                         $('.nav-tab-wrapper a').removeClass('nav-tab-active');
                         $(this).addClass('nav-tab-active').blur();
                         var clicked_group = $(this).attr('href');
-                        if (typeof(localStorage) != 'undefined') {
+                        if (typeof (localStorage) != 'undefined') {
                             localStorage.setItem("activetab", $(this).attr('href'));
                         }
                         $('.group').hide();
@@ -539,18 +805,3 @@ if (!class_exists('WeDevs_Settings_API')):
     }
 
 endif;
-
-
-
-/*$html = sprintf('<input type="%1$s" class="timepicker"  name="%2$s[%3$s][date]" value="%4$s" placeholder="date" />', $type, $args['section'], $args['id'], $value['opening']);
-
-            $html .= sprintf('<input type="%1$s" class="timepicker" name="%2$s[%3$s][start]" value="%4$s" placeholder="start" />', $type, $args['section'], $args['id'], $value['ending']);
-
-            $html .= sprintf('<input type="%1$s" class="timepicker" name="%2$s[%3$s][end]" value="%4$s" placeholder="end" />', $type, $args['section'], $args['id'], $value['ending']);
-
-            $html .= sprintf('<input type="%1$s" class="timepicker" name="%2$s[%3$s][subject]" value="%4$s" placeholder="subject" />', $type, $args['section'], $args['id'], $value['ending']);
-
-            //$html .= $this->get_field_description($args);
-
-
-            */

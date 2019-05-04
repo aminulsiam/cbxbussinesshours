@@ -2,6 +2,7 @@
 
     $(document).ready(function () {
 
+
         /**
          *  @timepicker function
          */
@@ -30,8 +31,7 @@
 
 
         // exceptional field added
-        $(".ex_wrapper").on('click', '.add_exception', function (e) {
-            e.preventDefault();
+        $(".ex_wrapper").on('click', '.add_exception', function () {
 
             var $this = $(this);
 
@@ -46,11 +46,11 @@
             $ex_last_count.val($ex_last_count_val);
 
             var field = "<p class='ex_item'>" +
-                "<input type='text' required autocomplete='off' name='cbx_opening_hours[exception][" + $ex_last_count_val + "][ex_date]' placeholder='" + translation['date'] + "' class='date'/>" +
-                " <input type='text' class='timepicker' autocomplete='off' name='cbx_opening_hours[exception][" + $ex_last_count_val + "][ex_start]' placeholder='" + translation['start'] + "' />" +
-                " <input type='text' class='timepicker' autocomplete='off' name='cbx_opening_hours[exception][" + $ex_last_count_val + "][ex_end]' placeholder='" + translation['end'] + "'  />" +
-                " <input type='text' autocomplete='off' name='cbx_opening_hours[exception][" + $ex_last_count_val + "][ex_subject]' placeholder='" + translation['subject'] + "' />" +
-                "<a class='remove_exception'> " + translation['remove'] + " </a>" +
+                "<input type='text' required autocomplete='off' name='cbxbusinesshours_hours[exception][" + $ex_last_count_val + "][ex_date]' placeholder='date' class='date'/>" +
+                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exception][" + $ex_last_count_val + "][ex_start]' placeholder='start' />" +
+                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exception][" + $ex_last_count_val + "][ex_end]' placeholder='end'  />" +
+                " <input type='text' autocomplete='off' name='cbxbusinesshours_hours[exception][" + $ex_last_count_val + "][ex_subject]' placeholder='subject' />" +
+                "<a class='remove_exception'>  remove</a>" +
                 "</p>";
 
             $ex_wrapper.find($ex_items).append(field);
@@ -74,5 +74,3 @@
     });
 
 })(jQuery);
-
-

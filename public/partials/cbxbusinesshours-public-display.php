@@ -5,11 +5,11 @@
  *
  * This file is used to markup the public-facing aspects of the plugin.
  *
- * @link       aminulhossain.com
+ * @link       https://codeboxr.com
  * @since      1.0.0
  *
- * @package    Cbx_opening_hours
- * @subpackage Cbx_opening_hours/public/partials
+ * @package    CBXBusinessHours
+ * @subpackage CBXBusinessHours/public/partials
  */
 ?>
 

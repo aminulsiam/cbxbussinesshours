@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: CBX Office Opening & Business Hours\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-25 10:15+0000\n"
+"PO-Revision-Date: 2019-04-25 12:05+0000\n"
+"Last-Translator: admin <ove.saiful@gmail.com>\n"
+"Language-Team: \n"
+"Language: bn_BD\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.2.2; wp-5.1.1"
+
+#: admin/class-cbxbusinesshours-admin.php:110
+msgid "Office Opening & Business Hours"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:110
+msgid "Office Business Hours"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:129
+msgid "Manage Hours"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:133
+msgid "Settings"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:145
+#: includes/class-cbxbusinesshours-helper.php:18
+msgid "Sunday"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:150
+#: includes/class-cbxbusinesshours-helper.php:19
+msgid "Monday"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:155
+#: includes/class-cbxbusinesshours-helper.php:20
+msgid "Tuesday"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:160
+#: includes/class-cbxbusinesshours-helper.php:21
+msgid "Wednesday"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:165
+#: includes/class-cbxbusinesshours-helper.php:22
+msgid "Thursday"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:170
+#: includes/class-cbxbusinesshours-helper.php:23
+msgid "Friday"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:175
+#: includes/class-cbxbusinesshours-helper.php:24
+msgid "Saturday"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:182
+msgid "Default Display Mode"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:18
+msgid "Sun"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:19
+msgid "Mon"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:20
+msgid "Tue"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:21
+msgid "Wed"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:22
+msgid "Thu"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:23
+msgid "Fri"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:24
+msgid "Sat"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:62
+msgid "Closed"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-front_widget.php:13
+#: widgets/class-cbxbusinesshour-front_widget.php:43
+msgid "Business Hours"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-front_widget.php:16
+msgid "Title : "
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-front_widget.php:20
+msgid "Table Type : "
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-front_widget.php:24
+msgid "Plain Table"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-front_widget.php:25
+msgid "Compact Table"
+msgstr ""
+
+#. Name of the plugin
+msgid "CBX Office Opening & Business Hours"
+msgstr ""
+
+#. Description of the plugin
+msgid "Office opening and close time or business hours display"
+msgstr ""
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://codeboxr.com"
+msgstr ""
+
+#. Author of the plugin
+msgid "Codeboxr"
+msgstr ""

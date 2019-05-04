@@ -1,0 +1,23 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.labels{
+    display: inline-block;
+    text-align: right;
+    width: 10%;
+    padding: 5px;
+}
+.rightTab {
+    display: inline-block;
+    text-align: left;
+    width: 48%;
+    padding: 10px;
+}
+.input-field {
+    height: 40px;
+    padding: 12px;
+    margin: 10px;
+    border: 0;
+}

@@ -19,13 +19,13 @@
  * For more information, see the following discussion:
  * https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/pull/123#issuecomment-28541913
  *
- * @link       aminulhossain.com
+ * @link       https://codeboxr.com
  * @since      1.0.0
  *
- * @package    Cbx_opening_hours
+ * @package    CBXBusinessHours
  */
 
 // If uninstall not called from WordPress, then exit.
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit;
+if (!defined('WP_UNINSTALL_PLUGIN')) {
+    exit;
 }
