@@ -241,130 +241,34 @@ if (!class_exists('CBXBusinessHoursSettings')):
                 $value['end'] = '';
             }
 
-
-            /* if (!isset($value['start'])) $value['start'] = '';
-             if (!isset($value['end'])) $value['end'] = '';*/
-
-            $sunday = isset($value['sunday']['start']) ? $value['sunday']['start'] : "";
-            $monday = isset($value['monday']['start']) ? $value['monday']['start'] : "";
-            $tuesday = isset($value['tuesday']['start']) ? $value['tuesday']['start'] : "";
-            $wednesday = isset($value['wednesday']['start']) ? $value['wednesday']['start'] : "";
-            $thursday = isset($value['thursday']['start']) ? $value['thursday']['start'] : "";
-            $friday = isset($value['friday']['start']) ? $value['friday']['start'] : "";
-            $saturday = isset($value['saturday']['start']) ? $value['saturday']['start'] : "";
-
-
             $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
             $type = isset($args['type']) ? $args['type'] : 'text';
 
 
-            /**
-             * Input field for sunday
-             */
-            $html = sprintf('<div>');
-            $html .= sprintf('<div class="labels"><label> Sunday : </div></label>');
-            $html .= sprintf('<div class="rightTab">');
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][sunday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $sunday);
+            $dow = array(
 
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][sunday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $sunday);
-            $html .= sprintf('</div>');
-            $html .= sprintf('</div>');
-            /**
-             * Ending
-             */
+                'sunday' => esc_html__('Sunday', 'cbxbusinesshours'),
+                'monday' => esc_html__('Monday', 'cbxbusinesshours'),
+                'tuesday' => esc_html__('Tuesday', 'cbxbusinesshours'),
+                'wednesday' => esc_html__('Wednesday', 'cbxbusinesshours'),
+                'thursday' => esc_html__('Thursday', 'cbxbusinesshours'),
+                'friday' => esc_html__('Friday', 'cbxbusinesshours'),
+                'saturday' => esc_html__('Saturday', 'cbxbusinesshours')
 
-            /**
-             * Input field for Monday
-             */
-            $html .= sprintf('<div>');
-            $html .= sprintf('<div class="labels"><label> Monday : </div></label>');
-            $html .= sprintf('<div class="rightTab">');
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][monday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $monday);
+            );
 
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][monday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $monday);
-            $html .= sprintf('</div>');
-            $html .= sprintf('</div>');
-            /**
-             * Ending
-             */
+            foreach ($dow as $key => $days) {
+                $html = sprintf('<div>');
+                $html .= sprintf('<div class="labels"><label>' . esc_html__($days, 'cbxbusinesshours') . ' : </div></label>');
+                $html .= sprintf('<div class="rightTab">');
+                $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" name="%3$s[%4$s][' . $key . '][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $value[$key]['start']);
 
-            /**
-             * Input field for Tuesday
-             */
-            $html .= sprintf('<div>');
-            $html .= sprintf('<div class="labels"><label> ' . esc_html__('Tuesday', 'cbxbussinesshours') . ' </div></label>');
-            $html .= sprintf('<div class="rightTab">');
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][tuesday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $tuesday);
-
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][tuesday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $tuesday);
-            $html .= sprintf('</div>');
-            $html .= sprintf('</div>');
-            /**
-             * Ending
-             */
-
-            /**
-             * Input field for Wednesday
-             */
-            $html .= sprintf('<div>');
-            $html .= sprintf('<div class="labels"><label> Wednesday : </div></label>');
-            $html .= sprintf('<div class="rightTab">');
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][wednesday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $wednesday);
-
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][wednesday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $wednesday);
-            $html .= sprintf('</div>');
-            $html .= sprintf('</div>');
-            /**
-             * Ending
-             */
-
-            /**
-             * Input field for Thursday
-             */
-            $html .= sprintf('<div>');
-            $html .= sprintf('<div class="labels"><label>' . __('Thursday : ', 'cbxbusinesshours') . '</label></div>');
-            $html .= sprintf('<div class="rightTab">');
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][thursday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $thursday);
-
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][thursday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $thursday);
-            $html .= sprintf('</div>');
-            $html .= sprintf('</div>');
-            /**
-             * Ending
-             */
-
-            /**
-             * Input field for Friday
-             */
-            $html .= sprintf('<div>');
-            $html .= sprintf('<div class="labels"><label> Friday : </div></label>');
-            $html .= sprintf('<div class="rightTab">');
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][friday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $friday);
-
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][friday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $friday);
-            $html .= sprintf('</div>');
-            $html .= sprintf('</div>');
-            /**
-             * Ending
-             */
-
-            /**
-             * Input field for Saturday
-             */
-            $html .= sprintf('<div>');
-            $html .= sprintf('<div class="labels"><label> Saturday : </div></label>');
-            $html .= sprintf('<div class="rightTab">');
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][saturday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $saturday);
-
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" id="%3$s[%4$s]-1" name="%3$s[%4$s][saturday][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $saturday);
-            $html .= sprintf('</div>');
-            $html .= sprintf('</div>');
-            /**
-             * Ending
-             */
-
-            $html .= $this->get_field_description($args);
-            echo $html;
+                $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" name="%3$s[%4$s][' . $key . '][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $value[$key]['end']);
+                $html .= sprintf('</div>');
+                $html .= sprintf('</div>');
+                $html .= $this->get_field_description($args);
+                echo $html;
+            }
 
         }// End of time3 method
 
@@ -516,59 +420,7 @@ if (!class_exists('CBXBusinessHoursSettings')):
             echo $html;
         }
 
-        /**
-         * Displays a password field for a settings field
-         *
-         * @param array $args settings field args
-         */
-        function callback_password($args)
-        {
-
-            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
-            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
-
-            $html = sprintf('<input type="password" class="%1$s-text" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['section'], $args['id'], $value);
-            $html .= $this->get_field_description($args);
-
-            echo $html;
-        }
-
-        /**
-         * Displays a color picker field for a settings field
-         *
-         * @param array $args settings field args
-         */
-        function callback_color($args)
-        {
-
-            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
-            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
-
-            $html = sprintf('<input type="text" class="%1$s-text wp-color-picker-field" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s" data-default-color="%5$s" />', $size, $args['section'], $args['id'], $value, $args['std']);
-            $html .= $this->get_field_description($args);
-
-            echo $html;
-        }
-
-
-        /**
-         * Displays a select box for creating the pages select box
-         *
-         * @param array $args settings field args
-         */
-        function callback_pages($args)
-        {
-
-            $dropdown_args = array(
-                'selected' => esc_attr($this->get_option($args['id'], $args['section'], $args['std'])),
-                'name' => $args['section'] . '[' . $args['id'] . ']',
-                'id' => $args['section'] . '[' . $args['id'] . ']',
-                'echo' => 0
-            );
-            $html = wp_dropdown_pages($dropdown_args);
-            echo $html;
-        }
-
+        
         /**
          * Sanitize callback for Settings API
          *
