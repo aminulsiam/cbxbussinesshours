@@ -59,7 +59,7 @@ class CBXBusinessHoursDashboard
             $options['role'] = array_merge(array('administrator'), $role);
             update_option('cbxbusinesshours_dashboard_widget', $options);
         } else {
-            $role = isset($options['role']) ? $options['role'] : array();
+            $role = isset($options['role']) ? $options['role'] : array('administrator');
         }
         ?>
 

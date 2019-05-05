@@ -73,12 +73,16 @@ class CbxBusinessHours_Admin
      */
     public function enqueue_styles()
     {
-        $page = isset($_REQUEST['page'])? sanitize_text_field($_REQUEST['page']): '';
+        $page = isset($_REQUEST['page']) ? sanitize_text_field($_REQUEST['page']) : '';
 
-        if($page == 'cbxbusinesshours'){
+        if ($page == 'cbxbusinesshours') {
+
             wp_register_style('jquery-timepicker', plugin_dir_url(__FILE__) . '../assets/css/jquery.timepicker.min.css', array(), $this->version, 'all');
+
             wp_register_style('jquery-ui', plugin_dir_url(__FILE__) . '../assets/css/jquery-ui.css', array(), '1.12.1', 'all');
+
             wp_register_style('jquery-ui', plugin_dir_url(__FILE__) . '../assets/css/jquery-ui.css', array(), '1.6.3');
+
             wp_register_style('cbxbusinesshours-admin', plugin_dir_url(__FILE__) . '../assets/css/cbxbusinesshours-admin.css', array('jquery-timepicker'), $this->version, 'all');
 
             wp_enqueue_style('jquery-timepicker');
@@ -94,12 +98,27 @@ class CbxBusinessHours_Admin
      */
     public function enqueue_scripts()
     {
-        $page = isset($_REQUEST['page'])? sanitize_text_field($_REQUEST['page']): '';
+        $page = isset($_REQUEST['page']) ? sanitize_text_field($_REQUEST['page']) : '';
 
-        if($page == 'cbxbusinesshours'){
-            wp_register_script('jquery-timepicker', plugin_dir_url(__FILE__).'../assets/js/jquery.timepicker.min.js', array('jquery'), $this->version, true);
+        if ($page == 'cbxbusinesshours') {
+
+            wp_register_script('jquery-timepicker', plugin_dir_url(__FILE__) . '../assets/js/jquery.timepicker.min.js', array('jquery'), $this->version, true);
+
             wp_register_script('jquery-ui', plugin_dir_url(__FILE__) . '../assets/js/jquery-ui.js', array('jquery'), '1.6.3', true);
-            wp_register_script('cbxbusinesshours-admin', plugin_dir_url(__FILE__) . '../assets/js/cbxbusinesshours-admin.js', array('jquery','jquery-timepicker'), time(), true);
+
+            wp_register_script('cbxbusinesshours-admin', plugin_dir_url(__FILE__) . '../assets/js/cbxbusinesshours-admin.js', array('jquery', 'jquery-timepicker'), time(), true);
+
+
+            // Localize the script with translation
+            $translation_placeholder = array(
+                'remove' => __( 'Remove', 'cbxbusinesshours' ),
+                'date' => __( 'Date', 'cbxbusinesshours' ),
+                'start' => __( 'Start', 'cbxbusinesshours' ),
+                'end' => __( 'End', 'cbxbusinesshours' ),
+                'subject' => __( 'Subject', 'cbxbusinesshours' )
+            );
+            wp_localize_script( 'cbxbusinesshours-admin', 'translation', $translation_placeholder );
+
 
             wp_enqueue_script('jquery-timepicker');
             wp_enqueue_script('jquery-ui');
