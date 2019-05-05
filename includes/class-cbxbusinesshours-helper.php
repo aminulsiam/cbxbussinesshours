@@ -10,10 +10,16 @@ class CBXBusinessHoursHelper
     public static function business_hours_display($atts)
     {
         $optionValue = get_option('cbxbusinesshours_hours');
-        $starting_time = array_column($optionValue['day'], 'start');
-        $ending_time = array_column($optionValue['day'], 'end');
+
+        $optionday = isset($optionValue['day']) ? $optionValue['day'] : array();
+
+
+        $starting_time = array_column($optionday, 'start');
+        $ending_time = array_column($optionday, 'end');
+
+
         $html = '';
-        if (is_array($optionValue['day'])) {
+        if (is_array($optionValue)) {
             $dow = array(
 
                 array('long' => esc_html__('Sunday', 'cbxbusinesshours'), 'short' => esc_html__('Sun', 'cbxbusinesshours')),
