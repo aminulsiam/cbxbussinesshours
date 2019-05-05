@@ -292,7 +292,7 @@ if (!class_exists('CBXBusinessHoursSettings')):
              * Input field for Tuesday
              */
             $html .= sprintf('<div>');
-            $html .= sprintf('<div class="labels"><label> Tuesday : </div></label>');
+            $html .= sprintf('<div class="labels"><label> ' . esc_html__('Tuesday', 'cbxbussinesshours') . ' </div></label>');
             $html .= sprintf('<div class="rightTab">');
             $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" id="%3$s[%4$s]-0" name="%3$s[%4$s][tuesday][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $tuesday);
 
@@ -388,11 +388,11 @@ if (!class_exists('CBXBusinessHoursSettings')):
                                        name="cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_date]"
                                        value="<?php echo esc_attr($exception['ex_date']) ?>">
 
-                                <input type="text"
+                                <input type="text" class="timepicker"
                                        name='cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_start]'
                                        value="<?php echo esc_attr($exception['ex_start']) ?>">
 
-                                <input type="text"
+                                <input type="text" class="timepicker"
                                        name='cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_end]'
                                        value="<?php echo esc_attr($exception['ex_end']) ?>">
 
@@ -400,8 +400,10 @@ if (!class_exists('CBXBusinessHoursSettings')):
                                        name="cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_subject]"
                                        value="<?php echo esc_attr($exception['ex_subject']) ?>">
 
-                                <a class="remove_exception">
-                                    <?php echo esc_html__('Remove', 'cbx_opening_hours'); ?>
+                                <a class="remove_exception button">
+                                    <?php
+                                    echo '<span class="dashicons dashicons-trash" style="margin-top: 3px;color: red;">
+                                    </span>' . esc_html__('Remove', 'cbxbussinesshours'); ?>
                                 </a>
                             </p>
 
@@ -409,7 +411,10 @@ if (!class_exists('CBXBusinessHoursSettings')):
                     } // end if condition
                     ?>
                 </div>
-                <a class="add_exception"><?php echo esc_html__('Add new', 'cbx_opening_hours'); ?></a>
+                <a class="add_exception button">
+                    <span class="dashicons dashicons-plus-alt" style="margin-top: 3px;color: darkgreen;"></span>
+                    <?php echo esc_html__('Add new', 'cbx_opening_hours'); ?>
+                </a>
                 <input type="hidden" class="exception_last_count" name="cbxbusinesshours_hours[ex_last_count]"
                        value="<?= esc_attr(intval($ex_last_count)); ?>"/>
             </div>
