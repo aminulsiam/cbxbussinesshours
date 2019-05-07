@@ -9,555 +9,544 @@
  * @link https://tareq.co Tareq Hasan
  * @example example/oop-example.php How to use the class
  */
-if (!class_exists('CBXBusinessHoursSettings')):
-    class CBXBusinessHoursSettings
-    {
+if ( ! class_exists( 'CBXBusinessHoursSettings' ) ):
+	class CBXBusinessHoursSettings {
 
-        /**
-         * settings sections array
-         *
-         * @var array
-         */
-        protected $settings_sections = array();
+		/**
+		 * settings sections array
+		 *
+		 * @var array
+		 */
+		protected $settings_sections = array();
 
-        /**
-         * Settings fields array
-         *
-         * @var array
-         */
-        protected $settings_fields = array();
+		/**
+		 * Settings fields array
+		 *
+		 * @var array
+		 */
+		protected $settings_fields = array();
 
-        public function __construct()
-        {
-            add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
-        }
+		public function __construct() {
+			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		}
 
-        /**
-         * Enqueue scripts and styles
-         */
-        function admin_enqueue_scripts()
-        {
-            wp_enqueue_style('wp-color-picker');
+		/**
+		 * Enqueue scripts and styles
+		 */
+		function admin_enqueue_scripts() {
+			wp_enqueue_style( 'wp-color-picker' );
 
-            wp_enqueue_media();
-            wp_enqueue_script('wp-color-picker');
-            wp_enqueue_script('jquery');
-        }
+			wp_enqueue_media();
+			wp_enqueue_script( 'wp-color-picker' );
+			wp_enqueue_script( 'jquery' );
+		}
 
-        /**
-         * Set settings sections
-         *
-         * @param array $sections setting sections array
-         */
-        function set_sections($sections)
-        {
-            $this->settings_sections = $sections;
+		/**
+		 * Set settings sections
+		 *
+		 * @param array $sections setting sections array
+		 */
+		function set_sections( $sections ) {
+			$this->settings_sections = $sections;
 
-            return $this;
-        }
+			return $this;
+		}
 
-        /**
-         * Add a single section
-         *
-         * @param array $section
-         */
-        function add_section($section)
-        {
-            $this->settings_sections[] = $section;
+		/**
+		 * Add a single section
+		 *
+		 * @param array $section
+		 */
+		function add_section( $section ) {
+			$this->settings_sections[] = $section;
 
-            return $this;
-        }
+			return $this;
+		}
 
-        /**
-         * Set settings fields
-         *
-         * @param array $fields settings fields array
-         */
-        public function set_fields($fields)
-        {
-            $this->settings_fields = $fields;
+		/**
+		 * Set settings fields
+		 *
+		 * @param array $fields settings fields array
+		 */
+		public function set_fields( $fields ) {
+			$this->settings_fields = $fields;
 
-            return $this;
-        }
+			return $this;
+		}
 
-        public function add_field($section, $field)
-        {
-            $defaults = array(
-                'name' => '',
-                'label' => '',
-                'desc' => '',
-                'type' => 'text'
-            );
+		public function add_field( $section, $field ) {
+			$defaults = array(
+				'name'  => '',
+				'label' => '',
+				'desc'  => '',
+				'type'  => 'text'
+			);
 
-            $arg = wp_parse_args($field, $defaults);
-            $this->settings_fields[$section][] = $arg;
+			$arg                                 = wp_parse_args( $field, $defaults );
+			$this->settings_fields[ $section ][] = $arg;
 
-            return $this;
-        }
+			return $this;
+		}
 
-        public function office_hours_form()
-        { ?>
+		public function office_hours_form() { ?>
             <div></div>
-        <?php }
+		<?php }
 
-        /**
-         * Initialize and registers the settings sections and fileds to WordPress
-         *
-         * Usually this should be called at `admin_init` hook.
-         *
-         * This function gets the initiated settings sections and fields. Then
-         * registers them to WordPress and ready for use.
-         */
-        function admin_init()
-        {
-            //register settings sections
-            foreach ($this->settings_sections as $section) {
-                if (false == get_option($section['id'])) {
-                    add_option($section['id']);
-                }
+		/**
+		 * Initialize and registers the settings sections and fileds to WordPress
+		 *
+		 * Usually this should be called at `admin_init` hook.
+		 *
+		 * This function gets the initiated settings sections and fields. Then
+		 * registers them to WordPress and ready for use.
+		 */
+		function admin_init() {
+			//register settings sections
+			foreach ( $this->settings_sections as $section ) {
+				if ( false == get_option( $section['id'] ) ) {
+					add_option( $section['id'] );
+				}
 
-                if (isset($section['desc']) && !empty($section['desc'])) {
-                    $section['desc'] = '<div class="inside">' . $section['desc'] . '</div>';
-                    $callback = function () use ($section) {
-                        echo str_replace('"', '\"', $section['desc']);
-                    };
-                } else if (isset($section['callback'])) {
-                    $callback = $section['callback'];
-                } else {
-                    $callback = null;
-                }
+				if ( isset( $section['desc'] ) && ! empty( $section['desc'] ) ) {
+					$section['desc'] = '<div class="inside">' . $section['desc'] . '</div>';
+					$callback        = function () use ( $section ) {
+						echo str_replace( '"', '\"', $section['desc'] );
+					};
+				} else if ( isset( $section['callback'] ) ) {
+					$callback = $section['callback'];
+				} else {
+					$callback = null;
+				}
 
-                add_settings_section($section['id'], $section['title'], $callback, $section['id']);
-            }
+				add_settings_section( $section['id'], $section['title'], $callback, $section['id'] );
+			}
 
-            //register settings fields
-            foreach ($this->settings_fields as $section => $field) {
-                foreach ($field as $option) {
+			//register settings fields
+			foreach ( $this->settings_fields as $section => $field ) {
+				foreach ( $field as $option ) {
 
-                    $name = $option['name'];
-                    $type = isset($option['type']) ? $option['type'] : 'text';
-                    $label = isset($option['label']) ? $option['label'] : '';
-                    $callback = isset($option['callback']) ? $option['callback'] : array($this, 'callback_' . $type);
+					$name     = $option['name'];
+					$type     = isset( $option['type'] ) ? $option['type'] : 'text';
+					$label    = isset( $option['label'] ) ? $option['label'] : '';
+					$callback = isset( $option['callback'] ) ? $option['callback'] : array(
+						$this,
+						'callback_' . $type
+					);
 
-                    $args = [
-                        'id' => $name,
-                        'class' => isset($option['class']) ? $option['class'] : $name,
-                        'label_for' => "{$section}[{$name}]",
-                        'desc' => isset($option['desc']) ? $option['desc'] : '',
-                        'name' => $label,
-                        'section' => $section,
-                        'size' => isset($option['size']) ? $option['size'] : null,
-                        'options' => isset($option['options']) ? $option['options'] : '',
-                        'std' => isset($option['default']) ? $option['default'] : '',
-                        'sanitize_callback' => isset($option['sanitize_callback']) ? $option['sanitize_callback'] : '',
-                        'type' => $type,
-                        'placeholder' => isset($option['placeholder']) ? $option['placeholder'] : '',
-                        'min' => isset($option['min']) ? $option['min'] : '',
-                        'max' => isset($option['max']) ? $option['max'] : '',
-                        'step' => isset($option['step']) ? $option['step'] : '',
-                    ];
+					$args = [
+						'id'                => $name,
+						'class'             => isset( $option['class'] ) ? $option['class'] : $name,
+						'label_for'         => "{$section}[{$name}]",
+						'desc'              => isset( $option['desc'] ) ? $option['desc'] : '',
+						'name'              => $label,
+						'section'           => $section,
+						'size'              => isset( $option['size'] ) ? $option['size'] : null,
+						'options'           => isset( $option['options'] ) ? $option['options'] : '',
+						'std'               => isset( $option['default'] ) ? $option['default'] : '',
+						'sanitize_callback' => isset( $option['sanitize_callback'] ) ? $option['sanitize_callback'] : '',
+						'type'              => $type,
+						'placeholder'       => isset( $option['placeholder'] ) ? $option['placeholder'] : '',
+						'min'               => isset( $option['min'] ) ? $option['min'] : '',
+						'max'               => isset( $option['max'] ) ? $option['max'] : '',
+						'step'              => isset( $option['step'] ) ? $option['step'] : '',
+					];
 
-                    add_settings_field("{$section}[{$name}]", $label, $callback, $section, $section, $args);
-                }
-            }
+					add_settings_field( "{$section}[{$name}]", $label, $callback, $section, $section, $args );
+				}
+			}
 
-            // creates our settings in the options table
-            foreach ($this->settings_sections as $section) {
-                register_setting($section['id'], $section['id'], array($this, 'sanitize_options'));
-            }
-        }
+			// creates our settings in the options table
+			foreach ( $this->settings_sections as $section ) {
+				register_setting( $section['id'], $section['id'], array( $this, 'sanitize_options' ) );
+			}
+		}
 
-        /**
-         * Get field description for display
-         *
-         * @param array $args settings field args
-         */
-        public function get_field_description($args)
-        {
-            if (!empty($args['desc'])) {
-                $desc = sprintf('<p class="description">%s</p>', $args['desc']);
-            } else {
-                $desc = '';
-            }
+		/**
+		 * Get field description for display
+		 *
+		 * @param array $args settings field args
+		 */
+		public function get_field_description( $args ) {
+			if ( ! empty( $args['desc'] ) ) {
+				$desc = sprintf( '<p class="description">%s</p>', $args['desc'] );
+			} else {
+				$desc = '';
+			}
 
-            return $desc;
-        }
+			return $desc;
+		}
 
-        /**
-         * Displays a text field for a settings field
-         *
-         * @param array $args settings field args
-         */
-        function callback_text($args)
-        {
-            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
-            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
-            $type = isset($args['type']) ? $args['type'] : 'text';
-            $placeholder = empty($args['placeholder']) ? '' : ' placeholder="' . $args['placeholder'] . '"';
-            $html = sprintf('<input type="%1$s" class="%2$s-text" id="%3$s[%4$s]" name="%3$s[%4$s]" value="%5$s"%6$s/>', $type, $size, $args['section'], $args['id'], $value, $placeholder);
-            $html .= $this->get_field_description($args);
-            echo $html;
-        }
+		/**
+		 * Displays a text field for a settings field
+		 *
+		 * @param array $args settings field args
+		 */
+		function callback_text( $args ) {
+			$value       = esc_attr( $this->get_option( $args['id'], $args['section'], $args['std'] ) );
+			$size        = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
+			$type        = isset( $args['type'] ) ? $args['type'] : 'text';
+			$placeholder = empty( $args['placeholder'] ) ? '' : ' placeholder="' . $args['placeholder'] . '"';
+			$html        = sprintf( '<input type="%1$s" class="%2$s-text" id="%3$s[%4$s]" name="%3$s[%4$s]" value="%5$s"%6$s/>', $type, $size, $args['section'], $args['id'], $value, $placeholder );
+			$html        .= $this->get_field_description( $args );
+			echo $html;
+		}
 
-        /**
-         * Displays a text field for a settings field
-         *
-         * @param array $args settings field args
-         */
-        function callback_time2($args)
-        {
-            $value = $this->get_option($args['id'], $args['section'], $args['std']);
+		/**
+		 * Displays a text field for a settings field
+		 *
+		 * @param array $args settings field args
+		 */
+		function callback_time2( $args ) {
+			$value = $this->get_option( $args['id'], $args['section'], $args['std'] );
 
-            if (!is_array($value)) {
-                $value = array();
-                $value['start'] = '';
-                $value['end'] = '';
-            }
+			if ( ! is_array( $value ) ) {
+				$value          = array();
+				$value['start'] = '';
+				$value['end']   = '';
+			}
 
-            if (!isset($value['start'])) $value['start'] = '';
-            if (!isset($value['end'])) $value['end'] = '';
+			if ( ! isset( $value['start'] ) ) {
+				$value['start'] = '';
+			}
+			if ( ! isset( $value['end'] ) ) {
+				$value['end'] = '';
+			}
 
-            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
-            $type = isset($args['type']) ? $args['type'] : 'text';
-            //$placeholder = empty( $args['placeholder'] ) ? '' : ' placeholder="' . $args['placeholder'] . '"';
+			$size = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
+			$type = isset( $args['type'] ) ? $args['type'] : 'text';
+			//$placeholder = empty( $args['placeholder'] ) ? '' : ' placeholder="' . $args['placeholder'] . '"';
 
-            $html = sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker" id="%3$s[%4$s]-0" name="%3$s[%4$s][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $value['start']);
+			$html = sprintf( '<input type="%1$s" class="%2$s-text2-0 timepicker" id="%3$s[%4$s]-0" name="%3$s[%4$s][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $value['start'] );
 
-            $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker" id="%3$s[%4$s]-1" name="%3$s[%4$s][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $value['end']);
-
-
-            $html .= $this->get_field_description($args);
-            echo $html;
-
-        }
-
-        function callback_time3($args)
-        {
-            $value = $this->get_option($args['id'], $args['section'], $args['std']);
-
-            if (!is_array($value)) {
-                $value = array();
-                $value['start'] = '';
-                $value['end'] = '';
-            }
-
-            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
-            $type = isset($args['type']) ? $args['type'] : 'text';
+			$html .= sprintf( '<input type="%1$s" class="%2$s-text2-1 timepicker" id="%3$s[%4$s]-1" name="%3$s[%4$s][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $value['end'] );
 
 
-            $dow = array(
+			$html .= $this->get_field_description( $args );
+			echo $html;
 
-                'sunday' => esc_html__('Sunday', 'cbxbusinesshours'),
-                'monday' => esc_html__('Monday', 'cbxbusinesshours'),
-                'tuesday' => esc_html__('Tuesday', 'cbxbusinesshours'),
-                'wednesday' => esc_html__('Wednesday', 'cbxbusinesshours'),
-                'thursday' => esc_html__('Thursday', 'cbxbusinesshours'),
-                'friday' => esc_html__('Friday', 'cbxbusinesshours'),
-                'saturday' => esc_html__('Saturday', 'cbxbusinesshours')
+		}
 
-            );
+		function callback_time3( $args ) {
+			$value = $this->get_option( $args['id'], $args['section'], $args['std'] );
 
-            foreach ($dow as $key => $days) {
-                $html = sprintf('<div>');
-                $html .= sprintf('<div class="labels"><label>' . esc_html__($days, 'cbxbusinesshours') . ' : </div></label>');
-                $html .= sprintf('<div class="rightTab">');
-                $html .= sprintf('<input type="%1$s" class="%2$s-text2-0 timepicker input-field" name="%3$s[%4$s][' . $key . '][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $value[$key]['start']);
+			$value = ! is_array( $value ) ? array() : $value;
 
-                $html .= sprintf('<input type="%1$s" class="%2$s-text2-1 timepicker input-field" name="%3$s[%4$s][' . $key . '][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $value[$key]['end']);
-                $html .= sprintf('</div>');
-                $html .= sprintf('</div>');
-                $html .= $this->get_field_description($args);
-                echo $html;
-            }
+			/*if ( ! is_array( $value ) ) {
+				$value          = array();
+				$value['start'] = '';
+				$value['end']   = '';
+			}*/
 
-        }// End of time3 method
+			$size = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
+			$type = isset( $args['type'] ) ? $args['type'] : 'text';
 
 
-        function callback_exceptionDay($args)
-        {
-            $exceptions_result = get_option('cbxbusinesshours_hours');
-            if (!is_array($exceptions_result)) $exceptions_result = array();
-            $exceptions = isset($exceptions_result['exception']) ? $exceptions_result['exception'] : array();
-            $ex_last_count = isset($exceptions_result['ex_last_count']) ? intval($exceptions_result['ex_last_count']) : 0;
-            ?>
+			$dow = array(
+				'sunday'    => esc_html__( 'Sunday', 'cbxbusinesshours' ),
+				'monday'    => esc_html__( 'Monday', 'cbxbusinesshours' ),
+				'tuesday'   => esc_html__( 'Tuesday', 'cbxbusinesshours' ),
+				'wednesday' => esc_html__( 'Wednesday', 'cbxbusinesshours' ),
+				'thursday'  => esc_html__( 'Thursday', 'cbxbusinesshours' ),
+				'friday'    => esc_html__( 'Friday', 'cbxbusinesshours' ),
+				'saturday'  => esc_html__( 'Saturday', 'cbxbusinesshours' )
+			);
+
+			foreach ( $dow as $key => $day ) {
+				$start_value = isset( $value[ $key ]['start'] ) ? $value[ $key ]['start'] : '';
+				$end_value   = isset( $value[ $key ]['end'] ) ? $value[ $key ]['end'] : '';
+
+				$html = sprintf( '<div>' );
+				$html .= sprintf( '<div class="labels"><label>' . $day . ' : </div></label>' );
+				$html .= sprintf( '<div class="rightTab">' );
+				$html .= sprintf( '<input type="%1$s" class="%2$s-text2-0 timepicker input-field" name="%3$s[%4$s][' . $key . '][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $start_value );
+
+				$html .= sprintf( '<input type="%1$s" class="%2$s-text2-1 timepicker input-field" name="%3$s[%4$s][' . $key . '][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $end_value );
+				$html .= sprintf( '</div>' );
+				$html .= sprintf( '</div>' );
+				$html .= $this->get_field_description( $args );
+				echo $html;
+			}
+
+		}// End of time3 method
+
+
+		function callback_exceptionDay( $args ) {
+			$exceptions_result = get_option( 'cbxbusinesshours_hours' );
+			if ( ! is_array( $exceptions_result ) ) {
+				$exceptions_result = array();
+			}
+			$exceptions    = isset( $exceptions_result['exceptions'] ) ? $exceptions_result['exceptions'] : array();
+			$ex_last_count = isset( $exceptions_result['ex_last_count'] ) ? intval( $exceptions_result['ex_last_count'] ) : 0;
+			?>
             <div class="ex_wrapper">
                 <div class="ex_items">
-                    <?php
-                    if (is_array($exceptions) && sizeof($exceptions) > 0) {
-                        foreach ($exceptions as $key => $exception) {
-                            ?>
+					<?php
+					if ( is_array( $exceptions ) && sizeof( $exceptions ) > 0 ) {
+						foreach ( $exceptions as $key => $exception ) {
+							?>
                             <p class="ex_item">
 
                                 <input type="text" class="date"
-                                       name="cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_date]"
-                                       value="<?php echo esc_attr($exception['ex_date']) ?>">
+                                       name="cbxbusinesshours_hours[exceptions][<?php echo esc_attr( $key ); ?>][ex_date]"
+                                       value="<?php echo esc_attr( $exception['ex_date'] ) ?>">
 
-                                <input type="text" class="timepicker"
-                                       name='cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_start]'
-                                       value="<?php echo esc_attr($exception['ex_start']) ?>">
+                                <input type="text" class="timepicker" autocomplete="off"
+                                       name='cbxbusinesshours_hours[exceptions][<?php echo esc_attr( $key ); ?>][ex_start]'
+                                       value="<?php echo esc_attr( $exception['ex_start'] ) ?>">
 
-                                <input type="text" class="timepicker"
-                                       name='cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_end]'
-                                       value="<?php echo esc_attr($exception['ex_end']) ?>">
+                                <input type="text" class="timepicker" autocomplete="off"
+                                       name='cbxbusinesshours_hours[exceptions][<?php echo esc_attr( $key ); ?>][ex_end]'
+                                       value="<?php echo esc_attr( $exception['ex_end'] ) ?>">
 
                                 <input type="text"
-                                       name="cbxbusinesshours_hours[exception][<?php echo esc_attr($key); ?>][ex_subject]"
-                                       value="<?php echo esc_attr($exception['ex_subject']) ?>">
+                                       name="cbxbusinesshours_hours[exceptions][<?php echo esc_attr( $key ); ?>][ex_subject]"
+                                       value="<?php echo esc_attr( $exception['ex_subject'] ) ?>">
 
                                 <a class="remove_exception button">
-                                    <?php
-                                    echo '<span class="dashicons dashicons-trash" style="margin-top: 3px;color: red;">
-                                    </span>' . esc_html__('Remove', 'cbxbussinesshours'); ?>
+									<?php
+									echo '<span class="dashicons dashicons-trash" style="margin-top: 3px;color: red;">
+                                    </span>' . esc_html__( 'Remove', 'cbxbussinesshours' ); ?>
                                 </a>
                             </p>
 
-                        <?php } // end foreach
-                    } // end if condition
-                    ?>
+						<?php } // end foreach
+					} // end if condition
+					?>
                 </div>
                 <a class="add_exception button">
                     <span class="dashicons dashicons-plus-alt" style="margin-top: 3px;color: darkgreen;"></span>
-                    <?php echo esc_html__('Add new', 'cbx_opening_hours'); ?>
+					<?php echo esc_html__( 'Add new', 'cbx_opening_hours' ); ?>
                 </a>
                 <input type="hidden" class="exception_last_count" name="cbxbusinesshours_hours[ex_last_count]"
-                       value="<?= esc_attr(intval($ex_last_count)); ?>"/>
+                       value="<?= esc_attr( intval( $ex_last_count ) ); ?>"/>
             </div>
-            <?php
-        } // end of method callback_exceptionDay
+			<?php
+		} // end of method callback_exceptionDay
 
 
-        /**
-         * Displays a url field for a settings field
-         *
-         * @param array $args settings field args
-         */
-        public function callback_url($args)
-        {
-            $this->callback_text($args);
-        }
+		/**
+		 * Displays a url field for a settings field
+		 *
+		 * @param array $args settings field args
+		 */
+		public function callback_url( $args ) {
+			$this->callback_text( $args );
+		}
 
 
-        /**
-         * Displays a selectbox for a settings field
-         *
-         * @param array $args settings field args
-         */
-        function callback_select($args)
-        {
+		/**
+		 * Displays a selectbox for a settings field
+		 *
+		 * @param array $args settings field args
+		 */
+		function callback_select( $args ) {
 
-            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
-            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
-            $html = sprintf('<select class="%1$s" name="%2$s[%3$s]" id="%2$s[%3$s]">', $size, $args['section'], $args['id']);
+			$value = esc_attr( $this->get_option( $args['id'], $args['section'], $args['std'] ) );
+			$size  = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
+			$html  = sprintf( '<select class="%1$s" name="%2$s[%3$s]" id="%2$s[%3$s]">', $size, $args['section'], $args['id'] );
 
-            foreach ($args['options'] as $key => $label) {
-                $html .= sprintf('<option value="%s"%s>%s</option>', $key, selected($value, $key, false), $label);
-            }
+			foreach ( $args['options'] as $key => $label ) {
+				$html .= sprintf( '<option value="%s"%s>%s</option>', $key, selected( $value, $key, false ), $label );
+			}
 
-            $html .= sprintf('</select>');
-            $html .= $this->get_field_description($args);
+			$html .= sprintf( '</select>' );
+			$html .= $this->get_field_description( $args );
 
-            echo $html;
-        }
+			echo $html;
+		}
 
-        /**
-         * Displays the html for a settings field
-         *
-         * @param array $args settings field args
-         * @return string
-         */
-        function callback_html($args)
-        {
-            echo $this->get_field_description($args);
-        }
+		/**
+		 * Displays the html for a settings field
+		 *
+		 * @param array $args settings field args
+		 *
+		 * @return string
+		 */
+		function callback_html( $args ) {
+			echo $this->get_field_description( $args );
+		}
 
-        /**
-         * Displays a rich text textarea for a settings field
-         *
-         * @param array $args settings field args
-         */
-        function callback_wysiwyg($args)
-        {
+		/**
+		 * Displays a rich text textarea for a settings field
+		 *
+		 * @param array $args settings field args
+		 */
+		function callback_wysiwyg( $args ) {
 
-            $value = $this->get_option($args['id'], $args['section'], $args['std']);
-            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : '500px';
+			$value = $this->get_option( $args['id'], $args['section'], $args['std'] );
+			$size  = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : '500px';
 
-            echo '<div style="max-width: ' . $size . ';">';
+			echo '<div style="max-width: ' . $size . ';">';
 
-            $editor_settings = array(
-                'teeny' => true,
-                'textarea_name' => $args['section'] . '[' . $args['id'] . ']',
-                'textarea_rows' => 10
-            );
+			$editor_settings = array(
+				'teeny'         => true,
+				'textarea_name' => $args['section'] . '[' . $args['id'] . ']',
+				'textarea_rows' => 10
+			);
 
-            if (isset($args['options']) && is_array($args['options'])) {
-                $editor_settings = array_merge($editor_settings, $args['options']);
-            }
+			if ( isset( $args['options'] ) && is_array( $args['options'] ) ) {
+				$editor_settings = array_merge( $editor_settings, $args['options'] );
+			}
 
-            wp_editor($value, $args['section'] . '-' . $args['id'], $editor_settings);
+			wp_editor( $value, $args['section'] . '-' . $args['id'], $editor_settings );
 
-            echo '</div>';
+			echo '</div>';
 
-            echo $this->get_field_description($args);
-        }
+			echo $this->get_field_description( $args );
+		}
 
-        /**
-         * Displays a file upload field for a settings field
-         *
-         * @param array $args settings field args
-         */
-        function callback_file($args)
-        {
+		/**
+		 * Displays a file upload field for a settings field
+		 *
+		 * @param array $args settings field args
+		 */
+		function callback_file( $args ) {
 
-            $value = esc_attr($this->get_option($args['id'], $args['section'], $args['std']));
-            $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
-            $id = $args['section'] . '[' . $args['id'] . ']';
-            $label = isset($args['options']['button_label']) ? $args['options']['button_label'] : __('Choose File');
+			$value = esc_attr( $this->get_option( $args['id'], $args['section'], $args['std'] ) );
+			$size  = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
+			$id    = $args['section'] . '[' . $args['id'] . ']';
+			$label = isset( $args['options']['button_label'] ) ? $args['options']['button_label'] : __( 'Choose File' );
 
-            $html = sprintf('<input type="text" class="%1$s-text wpsa-url" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['section'], $args['id'], $value);
-            $html .= '<input type="button" class="button wpsa-browse" value="' . $label . '" />';
-            $html .= $this->get_field_description($args);
+			$html = sprintf( '<input type="text" class="%1$s-text wpsa-url" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>', $size, $args['section'], $args['id'], $value );
+			$html .= '<input type="button" class="button wpsa-browse" value="' . $label . '" />';
+			$html .= $this->get_field_description( $args );
 
-            echo $html;
-        }
+			echo $html;
+		}
 
-        
-        /**
-         * Sanitize callback for Settings API
-         *
-         * @return mixed
-         */
-        function sanitize_options($options)
-        {
 
-            if (!$options) {
-                return $options;
-            }
+		/**
+		 * Sanitize callback for Settings API
+		 *
+		 * @return mixed
+		 */
+		function sanitize_options( $options ) {
 
-            foreach ($options as $option_slug => $option_value) {
-                $sanitize_callback = $this->get_sanitize_callback($option_slug);
+			if ( ! $options ) {
+				return $options;
+			}
 
-                // If callback is set, call it
-                if ($sanitize_callback) {
-                    $options[$option_slug] = call_user_func($sanitize_callback, $option_value);
-                    continue;
-                }
-            }
+			foreach ( $options as $option_slug => $option_value ) {
+				$sanitize_callback = $this->get_sanitize_callback( $option_slug );
 
-            return $options;
-        }
+				// If callback is set, call it
+				if ( $sanitize_callback ) {
+					$options[ $option_slug ] = call_user_func( $sanitize_callback, $option_value );
+					continue;
+				}
+			}
 
-        /**
-         * Get sanitization callback for given option slug
-         *
-         * @param string $slug option slug
-         *
-         * @return mixed string or bool false
-         */
-        function get_sanitize_callback($slug = '')
-        {
-            if (empty($slug)) {
-                return false;
-            }
+			return $options;
+		}
 
-            // Iterate over registered fields and see if we can find proper callback
-            foreach ($this->settings_fields as $section => $options) {
-                foreach ($options as $option) {
-                    if ($option['name'] != $slug) {
-                        continue;
-                    }
+		/**
+		 * Get sanitization callback for given option slug
+		 *
+		 * @param string $slug option slug
+		 *
+		 * @return mixed string or bool false
+		 */
+		function get_sanitize_callback( $slug = '' ) {
+			if ( empty( $slug ) ) {
+				return false;
+			}
 
-                    // Return the callback name
-                    return isset($option['sanitize_callback']) && is_callable($option['sanitize_callback']) ? $option['sanitize_callback'] : false;
-                }
-            }
+			// Iterate over registered fields and see if we can find proper callback
+			foreach ( $this->settings_fields as $section => $options ) {
+				foreach ( $options as $option ) {
+					if ( $option['name'] != $slug ) {
+						continue;
+					}
 
-            return false;
-        }
+					// Return the callback name
+					return isset( $option['sanitize_callback'] ) && is_callable( $option['sanitize_callback'] ) ? $option['sanitize_callback'] : false;
+				}
+			}
 
-        /**
-         * Get the value of a settings field
-         *
-         * @param string $option settings field name
-         * @param string $section the section name this field belongs to
-         * @param string $default default text if it's not found
-         * @return string
-         */
-        function get_option($option, $section, $default = '')
-        {
+			return false;
+		}
 
-            $options = get_option($section);
+		/**
+		 * Get the value of a settings field
+		 *
+		 * @param string $option settings field name
+		 * @param string $section the section name this field belongs to
+		 * @param string $default default text if it's not found
+		 *
+		 * @return string
+		 */
+		function get_option( $option, $section, $default = '' ) {
 
-            if (isset($options[$option])) {
-                return $options[$option];
-            }
+			$options = get_option( $section );
 
-            return $default;
-        }
+			if ( isset( $options[ $option ] ) ) {
+				return $options[ $option ];
+			}
 
-        /**
-         * Show navigations as tab
-         *
-         * Shows all the settings section labels as tab
-         */
-        function show_navigation()
-        {
-            $html = '<h2 class="nav-tab-wrapper">';
+			return $default;
+		}
 
-            $count = count($this->settings_sections);
+		/**
+		 * Show navigations as tab
+		 *
+		 * Shows all the settings section labels as tab
+		 */
+		function show_navigation() {
+			$html = '<h2 class="nav-tab-wrapper">';
 
-            // don't show the navigation if only one section exists
-            if ($count === 1) {
-                return;
-            }
+			$count = count( $this->settings_sections );
 
-            foreach ($this->settings_sections as $tab) {
-                $html .= sprintf('<a href="#%1$s" class="nav-tab" id="%1$s-tab">%2$s</a>', $tab['id'], $tab['title']);
-            }
+			// don't show the navigation if only one section exists
+			if ( $count === 1 ) {
+				return;
+			}
 
-            $html .= '</h2>';
+			foreach ( $this->settings_sections as $tab ) {
+				$html .= sprintf( '<a href="#%1$s" class="nav-tab" id="%1$s-tab">%2$s</a>', $tab['id'], $tab['title'] );
+			}
 
-            echo $html;
-        }
+			$html .= '</h2>';
 
-        /**
-         * Show the section settings forms
-         *
-         * This function displays every sections in a different form
-         */
-        function show_forms()
-        {
-            ?>
+			echo $html;
+		}
+
+		/**
+		 * Show the section settings forms
+		 *
+		 * This function displays every sections in a different form
+		 */
+		function show_forms() {
+			?>
             <div class="metabox-holder">
-                <?php foreach ($this->settings_sections as $form) { ?>
+				<?php foreach ( $this->settings_sections as $form ) { ?>
                     <div id="<?php echo $form['id']; ?>" class="group" style="display: none;">
                         <form method="post" action="options.php">
-                            <?php
-                            do_action('wsa_form_top_' . $form['id'], $form);
-                            settings_fields($form['id']);
-                            do_settings_sections($form['id']);
-                            do_action('wsa_form_bottom_' . $form['id'], $form);
-                            if (isset($this->settings_fields[$form['id']])):
-                                ?>
+							<?php
+							do_action( 'wsa_form_top_' . $form['id'], $form );
+							settings_fields( $form['id'] );
+							do_settings_sections( $form['id'] );
+							do_action( 'wsa_form_bottom_' . $form['id'], $form );
+							if ( isset( $this->settings_fields[ $form['id'] ] ) ):
+								?>
                                 <div style="padding-left: 10px">
-                                    <?php submit_button(); ?>
+									<?php submit_button(); ?>
                                 </div>
-                            <?php endif; ?>
+							<?php endif; ?>
                         </form>
                     </div>
-                <?php } ?>
+				<?php } ?>
             </div>
-            <?php
-            $this->script();
-        }
+			<?php
+			$this->script();
+		}
 
-        /**
-         * Tabbable JavaScript codes & Initiate Color Picker
-         *
-         * This code uses localstorage for displaying active tabs
-         */
-        function script()
-        {
-            ?>
+		/**
+		 * Tabbable JavaScript codes & Initiate Color Picker
+		 *
+		 * This code uses localstorage for displaying active tabs
+		 */
+		function script() {
+			?>
             <script>
                 jQuery(document).ready(function ($) {
                     //Initiate Color Picker
@@ -635,16 +624,15 @@ if (!class_exists('CBXBusinessHoursSettings')):
                     });
                 });
             </script>
-            <?php
-            $this->_style_fix();
-        }
+			<?php
+			$this->_style_fix();
+		}
 
-        function _style_fix()
-        {
-            global $wp_version;
+		function _style_fix() {
+			global $wp_version;
 
-            if (version_compare($wp_version, '3.8', '<=')):
-                ?>
+			if ( version_compare( $wp_version, '3.8', '<=' ) ):
+				?>
                 <style type="text/css">
                     /** WordPress 3.8 Fix **/
                     .form-table th {
@@ -655,10 +643,10 @@ if (!class_exists('CBXBusinessHoursSettings')):
                         padding-top: 5px;
                     }
                 </style>
-            <?php
-            endif;
-        }
+			<?php
+			endif;
+		}
 
-    }
+	}
 
 endif;

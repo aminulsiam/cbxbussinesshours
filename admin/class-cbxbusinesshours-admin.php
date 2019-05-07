@@ -102,7 +102,7 @@ class CbxBusinessHours_Admin
 
         if ($page == 'cbxbusinesshours') {
 
-            wp_register_script('jquery-timepicker', plugin_dir_url(__FILE__) . '../assets/js/jquery.timepicker.min.js', array('jquery'), $this->version, true);
+            wp_register_script('jquery-timepicker', plugin_dir_url(__FILE__) . '../assets/js/jquery.timepicker.min.js', array('jquery'), time(), true);
 
             wp_register_script('jquery-ui', plugin_dir_url(__FILE__) . '../assets/js/jquery-ui.js', array('jquery'), '1.6.3', true);
 
@@ -165,12 +165,12 @@ class CbxBusinessHours_Admin
         $settings_fields = array(
             'cbxbusinesshours_hours' => array(
                 array(
-                    'name' => 'day',
+                    'name' => 'weekdays',
                     'label' => esc_html__('Week Days', 'cbxbusinesshours'),
                     'type' => 'time3'
                 ),
                 array(
-                    'name' => 'exceptionDay',
+                    'name' => 'exceptions',
                     'label' => esc_html__('Exception Days / Holiday', 'cbxbusinesshours'),
                     'type' => 'exceptionDay'
                 )

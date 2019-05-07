@@ -45,10 +45,10 @@
             $ex_last_count.val($ex_last_count_val);
 
             var field = "<p class='ex_item'>" +
-                "<input type='text' required autocomplete='off' name='cbxbusinesshours_hours[exception][" + $ex_last_count_val + "][ex_date]' placeholder='" + translation['date'] + "' class='date'/>" +
-                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exception][" + $ex_last_count_val + "][ex_start]' placeholder='" + translation['start'] + "' />" +
-                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exception][" + $ex_last_count_val + "][ex_end]' placeholder='" + translation['end'] + "'  />" +
-                " <input type='text' autocomplete='off' name='cbxbusinesshours_hours[exception][" + $ex_last_count_val + "][ex_subject]' placeholder='" + translation['subject'] + "' />" +
+                "<input type='text' required autocomplete='off' name='cbxbusinesshours_hours[exceptions][" + $ex_last_count_val + "][ex_date]' placeholder='" + translation['date'] + "' class='date'/>" +
+                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exceptions][" + $ex_last_count_val + "][ex_start]' placeholder='" + translation['start'] + "' />" +
+                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exceptions][" + $ex_last_count_val + "][ex_end]' placeholder='" + translation['end'] + "'  />" +
+                " <input type='text' autocomplete='off' name='cbxbusinesshours_hours[exceptions][" + $ex_last_count_val + "][ex_subject]' placeholder='" + translation['subject'] + "' />" +
                 " <a class='remove_exception button'>" +
                 "<span class='dashicons dashicons-trash' style='margin-top: 3px;color: red;'></span>"
                 + translation['remove'] +
@@ -72,16 +72,10 @@
             $this.closest(".ex_item").remove();
         });
 
-        // show date ui
-        $(".ex_wrapper").on('click', '.date', function () {
-            datepicker();
-        });
 
-        // show date ui
-        $(".ex_wrapper").on('click', '.timepicker', function () {
-            timepicker();
-        });
-
+        //call for everyday bussiness hours input field
+        timepicker();
+        datepicker();
 
     });
 
