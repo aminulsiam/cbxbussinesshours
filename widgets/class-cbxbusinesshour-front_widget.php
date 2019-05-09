@@ -23,6 +23,8 @@ class CBXBusinessHoursFrontWidget extends WP_Widget
     public function form($instance)
     {
         $title = isset($instance['title']) ? $instance['title'] : esc_html__('Business Hours', 'cbxbusinesshours');
+        $compact = isset($instance['compact']) ? intval($instance['compact']) : 0;
+
         ?>
         <p>
             <label for="<?php echo esc_attr($this->get_field_id('title')) ?>"><?php echo esc_html__('Title : ', 'cbxbusinesshours') ?></label>
@@ -41,7 +43,7 @@ class CBXBusinessHoursFrontWidget extends WP_Widget
                 );
                 foreach ($postType as $key => $value) {
                     ?>
-                    <option value="<?php echo $key; ?>" <?php selected($instance['compact'], $key) ?> > <?php echo esc_html__($value, 'cbxbusinesshours') ?> </option>
+                    <option value="<?php echo $key; ?>" <?php selected($compact, $key) ?> > <?php echo esc_html__($value, 'cbxbusinesshours') ?> </option>
                 <?php } ?>
             </select>
         </p>

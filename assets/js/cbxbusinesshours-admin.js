@@ -8,11 +8,10 @@
         function timepicker() {
             // timepicker
             $('.timepicker').timepicker({
-                timeFormat: 'H:mm',
-                interval: 15,
-                minTime: '10',
-                maxTime: '6:00pm',
-                startTime: '00:00',
+                timeFormat: ''+translation['hoursformat']+':mm',
+                interval: 30,
+                maxTime: '18:00',
+                startTime: '9:00',
                 dropdown: true,
                 scrollbar: true
             });
@@ -27,6 +26,8 @@
                 dateFormat: 'yy-mm-dd'
             });
         }
+        timepicker();
+        datepicker();
 
 
         // exceptional field added
@@ -45,10 +46,10 @@
             $ex_last_count.val($ex_last_count_val);
 
             var field = "<p class='ex_item'>" +
-                "<input type='text' required autocomplete='off' name='cbxbusinesshours_hours[exceptions][" + $ex_last_count_val + "][ex_date]' placeholder='" + translation['date'] + "' class='date'/>" +
-                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exceptions][" + $ex_last_count_val + "][ex_start]' placeholder='" + translation['start'] + "' />" +
-                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exceptions][" + $ex_last_count_val + "][ex_end]' placeholder='" + translation['end'] + "'  />" +
-                " <input type='text' autocomplete='off' name='cbxbusinesshours_hours[exceptions][" + $ex_last_count_val + "][ex_subject]' placeholder='" + translation['subject'] + "' />" +
+                "<input type='text' required autocomplete='off' name='cbxbusinesshours_hours[exceptionDay][" + $ex_last_count_val + "][ex_date]' placeholder='" + translation['date'] + "' class='date'/>" +
+                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exceptionDay][" + $ex_last_count_val + "][ex_start]' placeholder='" + translation['start'] + "' />" +
+                " <input type='text' class='timepicker' autocomplete='off' name='cbxbusinesshours_hours[exceptionDay][" + $ex_last_count_val + "][ex_end]' placeholder='" + translation['end'] + "'  />" +
+                " <input type='text' autocomplete='off' name='cbxbusinesshours_hours[exceptionDay][" + $ex_last_count_val + "][ex_subject]' placeholder='" + translation['subject'] + "' />" +
                 " <a class='remove_exception button'>" +
                 "<span class='dashicons dashicons-trash' style='margin-top: 3px;color: red;'></span>"
                 + translation['remove'] +
@@ -72,10 +73,16 @@
             $this.closest(".ex_item").remove();
         });
 
+        // show date ui
+        $(".ex_wrapper").on('click', '.date', function () {
+            datepicker();
+        });
 
-        //call for everyday bussiness hours input field
-        timepicker();
-        datepicker();
+        // show time ui
+        $(".ex_wrapper").on('click', '.timepicker', function () {
+            timepicker();
+        });
+
 
     });
 

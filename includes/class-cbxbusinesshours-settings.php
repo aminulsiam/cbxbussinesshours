@@ -229,38 +229,33 @@ if ( ! class_exists( 'CBXBusinessHoursSettings' ) ):
 		function callback_time3( $args ) {
 			$value = $this->get_option( $args['id'], $args['section'], $args['std'] );
 
-			$value = ! is_array( $value ) ? array() : $value;
+			if ( ! is_array( $value ) ) {
+				$value = array();
+			}
 
-			/*if ( ! is_array( $value ) ) {
-				$value          = array();
-				$value['start'] = '';
-				$value['end']   = '';
-			}*/
 
 			$size = isset( $args['size'] ) && ! is_null( $args['size'] ) ? $args['size'] : 'regular';
 			$type = isset( $args['type'] ) ? $args['type'] : 'text';
 
+			$dow = CBXBusinessHoursHelper::getWeekLongDays();
+			$dow = CBXBusinessHoursHelper::sortDaysWithFirstDayofWeek( $dow );//keep in mind that $start_of_week has long key
 
-			$dow = array(
-				'sunday'    => esc_html__( 'Sunday', 'cbxbusinesshours' ),
-				'monday'    => esc_html__( 'Monday', 'cbxbusinesshours' ),
-				'tuesday'   => esc_html__( 'Tuesday', 'cbxbusinesshours' ),
-				'wednesday' => esc_html__( 'Wednesday', 'cbxbusinesshours' ),
-				'thursday'  => esc_html__( 'Thursday', 'cbxbusinesshours' ),
-				'friday'    => esc_html__( 'Friday', 'cbxbusinesshours' ),
-				'saturday'  => esc_html__( 'Saturday', 'cbxbusinesshours' )
-			);
+			foreach ( $dow as $key => $days ) {
 
-			foreach ( $dow as $key => $day ) {
-				$start_value = isset( $value[ $key ]['start'] ) ? $value[ $key ]['start'] : '';
-				$end_value   = isset( $value[ $key ]['end'] ) ? $value[ $key ]['end'] : '';
+				if ( ! isset( $value[$key]['start'] ) ) {
+					$value[$key]['start'] = '';
+				}
+				if ( ! isset( $value[$key]['end'] ) ) {
+					$value[$key]['end'] = '';
+				}
 
 				$html = sprintf( '<div>' );
-				$html .= sprintf( '<div class="labels"><label>' . $day . ' : </div></label>' );
+				$html .= sprintf( '<div class="labels"><label>' . esc_html__( $days, 'cbxbusinesshours' ) . ' : </div></label>' );
 				$html .= sprintf( '<div class="rightTab">' );
-				$html .= sprintf( '<input type="%1$s" class="%2$s-text2-0 timepicker input-field" name="%3$s[%4$s][' . $key . '][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $start_value );
+				$html .= sprintf( '<input autocomplete="off" type="%1$s" class="%2$s-text2-0 timepicker input-field" name="%3$s[%4$s][' . $key . '][start]" value="%5$s" placeholder="Opening Time"/>', $type, $size, $args['section'], $args['id'], $value[$key]['start'] );
 
-				$html .= sprintf( '<input type="%1$s" class="%2$s-text2-1 timepicker input-field" name="%3$s[%4$s][' . $key . '][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $end_value );
+				$html .= sprintf( '<input autocomplete="off" type="%1$s" class="%2$s-text2-1 timepicker input-field" name="%3$s[%4$s][' . $key . '][end]" value="%5$s"  placeholder="Ending Time"/>', $type, $size, $args['section'], $args['id'], $value[$key]['end'] );
+
 				$html .= sprintf( '</div>' );
 				$html .= sprintf( '</div>' );
 				$html .= $this->get_field_description( $args );
@@ -275,8 +270,9 @@ if ( ! class_exists( 'CBXBusinessHoursSettings' ) ):
 			if ( ! is_array( $exceptions_result ) ) {
 				$exceptions_result = array();
 			}
-			$exceptions    = isset( $exceptions_result['exceptions'] ) ? $exceptions_result['exceptions'] : array();
+			$exceptions    = isset( $exceptions_result['exceptionDay'] ) ? $exceptions_result['exceptionDay'] : array();
 			$ex_last_count = isset( $exceptions_result['ex_last_count'] ) ? intval( $exceptions_result['ex_last_count'] ) : 0;
+
 			?>
             <div class="ex_wrapper">
                 <div class="ex_items">
@@ -287,19 +283,19 @@ if ( ! class_exists( 'CBXBusinessHoursSettings' ) ):
                             <p class="ex_item">
 
                                 <input type="text" class="date"
-                                       name="cbxbusinesshours_hours[exceptions][<?php echo esc_attr( $key ); ?>][ex_date]"
+                                       name="cbxbusinesshours_hours[exceptionDay][<?php echo esc_attr( $key ); ?>][ex_date]"
                                        value="<?php echo esc_attr( $exception['ex_date'] ) ?>">
 
-                                <input type="text" class="timepicker" autocomplete="off"
-                                       name='cbxbusinesshours_hours[exceptions][<?php echo esc_attr( $key ); ?>][ex_start]'
+                                <input type="text" class="timepicker"
+                                       name='cbxbusinesshours_hours[exceptionDay][<?php echo esc_attr( $key ); ?>][ex_start]'
                                        value="<?php echo esc_attr( $exception['ex_start'] ) ?>">
 
-                                <input type="text" class="timepicker" autocomplete="off"
-                                       name='cbxbusinesshours_hours[exceptions][<?php echo esc_attr( $key ); ?>][ex_end]'
+                                <input type="text" class="timepicker"
+                                       name='cbxbusinesshours_hours[exceptionDay][<?php echo esc_attr( $key ); ?>][ex_end]'
                                        value="<?php echo esc_attr( $exception['ex_end'] ) ?>">
 
                                 <input type="text"
-                                       name="cbxbusinesshours_hours[exceptions][<?php echo esc_attr( $key ); ?>][ex_subject]"
+                                       name="cbxbusinesshours_hours[exceptionDay][<?php echo esc_attr( $key ); ?>][ex_subject]"
                                        value="<?php echo esc_attr( $exception['ex_subject'] ) ?>">
 
                                 <a class="remove_exception button">

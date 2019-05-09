@@ -1,116 +1,197 @@
 <?php
 
-/**
- * Helper class
- *
- * Class CBXBusinessHoursHelper
- */
 class CBXBusinessHoursHelper {
+
+	public static function getWeekLongDays() {
+		$weekdays              = array();
+		$weekdays['sunday']    = /* translators: weekday */
+			__( 'Sunday' );
+		$weekdays['monday']    = /* translators: weekday */
+			__( 'Monday' );
+		$weekdays['tuesday']   = /* translators: weekday */
+			__( 'Tuesday' );
+		$weekdays['wednesday'] = /* translators: weekday */
+			__( 'Wednesday' );
+		$weekdays['thursday']  = /* translators: weekday */
+			__( 'Thursday' );
+		$weekdays['friday']    = /* translators: weekday */
+			__( 'Friday' );
+		$weekdays['saturday']  = /* translators: weekday */
+			__( 'Saturday' );
+
+		return $weekdays;
+	}//end method getWeekLongDays
+
+	public static function getWeekLongDayKeys() {
+		$weekdays = CBXBusinessHoursHelper::getWeekLongDays();
+
+		return array_keys( $weekdays );
+	}//end method getWeekShortDayKeys
+
+
+	public static function getWeekShortDays() {
+		$weekdays        = array();
+		$weekdays['sun'] = /* translators: weekday */
+			__( 'Sun' );
+		$weekdays['mon'] = /* translators: weekday */
+			__( 'Mon' );
+		$weekdays['tue'] = /* translators: weekday */
+			__( 'Tue' );
+		$weekdays['wed'] = /* translators: weekday */
+			__( 'Wed' );
+		$weekdays['thu'] = /* translators: weekday */
+			__( 'Thu' );
+		$weekdays['fri'] = /* translators: weekday */
+			__( 'Fri' );
+		$weekdays['sat'] = /* translators: weekday */
+			__( 'Sat' );
+
+		return $weekdays;
+	}//end method getWeekShortDays
+
+	public static function getWeekShortDayKeys() {
+		$weekdays = CBXBusinessHoursHelper::getWeekShortDays();
+
+		return array_keys( $weekdays );
+	}//end method getWeekShortDayKeys
+
+	public static function sortDaysWithFirstDayofWeek( $arr = array() ) {
+		$start_of_week   = get_option( 'start_of_week' );
+		$sliced_array    = array_slice( $arr, $start_of_week );
+		$intersect_array = array_diff( $arr, $sliced_array );
+		$arr             = array_merge( $sliced_array, $intersect_array );
+
+		return $arr;
+	}//end method sortDaysWithFirstDayofWeek
+
+	public static function followWithFirstDayofWeekSorted( $office_weekdays, $weekdays ) {
+		$weekdays_sorted = array();
+		foreach ( $weekdays as $value ) {
+			$weekdays_sorted[] = isset( $office_weekdays[ $value ] ) ? $office_weekdays[ $value ] : array();
+		}
+		$office_weekdays = $weekdays_sorted;
+
+		return $office_weekdays;
+	}//end method followWithFirstDayofWeekSorted
+
+
 	/**
 	 * Returns business hours display as html
 	 *
 	 * @param $atts
 	 *
 	 * @return string
-	 * @throws Exception
 	 */
 	public static function business_hours_display( $atts ) {
-
-		$compact = isset( $atts['compact'] ) ? $atts['compact'] : 0;
-
+		global $wp_locale;
 		$optionValue = get_option( 'cbxbusinesshours_hours' );
 
-		$exceptions = isset( $optionValue['exceptions'] ) ? $optionValue['exceptions'] : array();
-		$weekdays   = isset( $optionValue['weekdays'] ) ? $optionValue['weekdays'] : array();
+		$office_weekdays = isset( $optionValue['weekdays'] ) ? $optionValue['weekdays'] : array();
+		$exceptions      = isset( $optionValue['exceptionDay'] ) ? $optionValue['exceptionDay'] : array();
+		$compact         = isset( $atts['compact'] ) ? $atts['compact'] : 0;
 
+		//write_log($office_weekdays);
 
-		$start_weekday_option_val = get_option( 'start_of_week' );
+		//Get the week first day
+		$start_of_week    = get_option( 'start_of_week' );
+		$date             = new DateTime();
+		$start_of_weekDay = $wp_locale->get_weekday( $start_of_week );
 
-		// get starts day from wordpress general settings
-		global $wp_locale;
-		$start_weekday = $wp_locale->get_weekday( $start_weekday_option_val );
-
-
-		// get last day and first day at current week
-		date_default_timezone_set( 'Asia/Dhaka' );
-		$date = new DateTime();
-
-		$date->modify( $start_weekday . ' this week' );  // todo : from general page get the starts week days
+		//Current week start and end date
+		$date->modify( $start_of_weekDay );
 		$current_week_start_date = $date->format( 'Y-m-d' );
-
-		write_log($current_week_start_date);
-
-		$date->modify( $start_weekday . 'this week +5 days' ); // todo : last date of the week form starts
+		$date->modify( $start_of_weekDay . 'this week +6 days' );
 		$current_week_end_date = $date->format( 'Y-m-d' );
 
 
 		if ( is_array( $exceptions ) && sizeof( $exceptions ) > 0 ) {
 			foreach ( $exceptions as $exception ) {
-
 				$ex_date = isset( $exception['ex_date'] ) ? $exception['ex_date'] : "";
-				$ex_day = date( 'l', strtotime( $ex_date ) );
+				$ex_day  = date( 'l', strtotime( $ex_date ) );
 
-				$found_day = strtolower( $ex_day );
+				$found_day       = strtolower( $ex_day );
+				$found_day_start = isset( $exception['ex_start'] ) ? $exception['ex_start'] : '';
+				$found_day_end   = isset( $exception['ex_end'] ) ? $exception['ex_end'] : '';
 
-				$found_day_start = isset($exception['ex_start']) ? $exception['ex_start'] : "";
-				$found_day_end   = isset($exception['ex_end']) ? $exception['ex_end'] : "";
-
-
-				if ( isset( $weekdays[ $found_day ] ) ) {
-					if ( $ex_date >= $current_week_start_date && $ex_date <= $current_week_end_date) {
-						$weekdays[ $found_day ]['start'] = $found_day_start;
-						$weekdays[ $found_day ]['end']   = $found_day_end;
+				if ( isset( $office_weekdays[ $found_day ] ) ) {
+					if ( $current_week_start_date <= $ex_date && $current_week_end_date >= $ex_date ) {
+						$office_weekdays[ $found_day ]['start'] = $found_day_start;
+						$office_weekdays[ $found_day ]['end']   = $found_day_end;
 					}
 				}
 			}
 		}
 
-		$starting_time = array_column( $weekdays, 'start' );
-		$ending_time   = array_column( $weekdays, 'end' );
+
+		//sorting array by start of weekdays
+		$weekdays = CBXBusinessHoursHelper::getWeekLongDayKeys();
+		$weekdays = CBXBusinessHoursHelper::sortDaysWithFirstDayofWeek( $weekdays );
+
+
+		/*$weekdays_sorted = array();
+		foreach ( $weekdays as $value ) {
+			$weekdays_sorted[] = $office_weekdays[ $value ];
+		}
+		$office_weekdays = $weekdays_sorted;*/
+
+		$office_weekdays = CBXBusinessHoursHelper::followWithFirstDayofWeekSorted( $office_weekdays, $weekdays );
+
+
+		//starting and ending time from database
+		$starting_time = array_column( $office_weekdays, 'start' );
+		$ending_time   = array_column( $office_weekdays, 'end' );
+
+		//write_log($starting_time);
+		//write_log($ending_time);
 
 		$html = '';
 		if ( is_array( $optionValue ) ) {
-			$dow = array(
 
-				array(
+			$dow = array(
+				'sunday'    => array(
 					'long'  => esc_html__( 'Sunday', 'cbxbusinesshours' ),
 					'short' => esc_html__( 'Sun', 'cbxbusinesshours' )
 				),
-				array(
+				'monday'    => array(
 					'long'  => esc_html__( 'Monday', 'cbxbusinesshours' ),
 					'short' => esc_html__( 'Mon', 'cbxbusinesshours' )
 				),
-				array(
+				'tuesday'   => array(
 					'long'  => esc_html__( 'Tuesday', 'cbxbusinesshours' ),
 					'short' => esc_html__( 'Tue', 'cbxbusinesshours' )
 				),
-				array(
+				'wednesday' => array(
 					'long'  => esc_html__( 'Wednesday', 'cbxbusinesshours' ),
 					'short' => esc_html__( 'Wed', 'cbxbusinesshours' )
 				),
-				array(
+				'thursday'  => array(
 					'long'  => esc_html__( 'Thursday', 'cbxbusinesshours' ),
 					'short' => esc_html__( 'Thu', 'cbxbusinesshours' )
 				),
-				array(
+				'friday'    => array(
 					'long'  => esc_html__( 'Friday', 'cbxbusinesshours' ),
 					'short' => esc_html__( 'Fri', 'cbxbusinesshours' )
 				),
-				array(
+				'saturday'  => array(
 					'long'  => esc_html__( 'Saturday', 'cbxbusinesshours' ),
 					'short' => esc_html__( 'Sat', 'cbxbusinesshours' )
 				)
-
 			);
 
 
+			$dow = CBXBusinessHoursHelper::followWithFirstDayofWeekSorted( $dow, $weekdays );
+
+
 			$key = ( false ) ? 'short' : 'long';
+
 			if ( $starting_time && $ending_time ) {
+
 				$opening_short = array();
 				for ( $i = 0; $i < 7; $i ++ ) {
 					$temp = array( $i );
 					for ( $j = $i + 1; $j < 7; $j ++ ) {
-						if ( intval( $compact ) == 0 ) {
+
+						if ( $compact == 0 ) {
 							$i = $j - 1;
 							$j = 7;
 						} elseif ( $starting_time[ $i ] == $starting_time[ $j ] && $ending_time[ $i ] == $ending_time[ $j ] ) {
@@ -129,62 +210,30 @@ class CBXBusinessHoursHelper {
 
 			if ( ! empty( $opening_short ) ) {
 				$html .= '<table>';
-
 				foreach ( $opening_short as $os ) {
 					$day_text = $dow[ $os[0] ][ $key ];
-
 					if ( count( $os ) > 1 ) {
-						$end      = array_pop( $os );
-						$end      = $dow[ $end ][ $key ];
+						$end = array_pop( $os );
+						$end = $dow[ $end ][ $key ];
+
 						$day_text = $day_text . ' - ' . $end;
 					}
-
 					if ( ! empty( $starting_time[ $os[0] ] ) && ! ( $starting_time[ $os[0] ] == '0:00' && $ending_time[ $os[0] ] == '0:00' ) ) {
-
-						/*foreach ( $exceptions as $value ) {
-
-							$ex_date = isset( $value['ex_date'] ) ? $value['ex_date'] : "";
-							$ex_day  = date( 'l', strtotime( $ex_date ) );
-
-							// current 7days
-							$days   = [];
-							$period = new DatePeriod(
-								new DateTime(), // Start date of the period
-								new DateInterval( 'P1D' ), // Define the intervals as Periods of 1 Day
-								6 // Apply the interval 6 times on top of the starting date
-							);
-
-							foreach ( $period as $day ) {
-								$days[] = $day->format( 'l' );
-							}
-
-							if ( in_array( $ex_day, $days ) ) {
-								foreach ( $days as $current_day ) {
-									if ( $ex_day == $current_day ) {
-
-									}
-								}
-							} else {
-								$hours_text = $starting_time[ $os[0] ] . ' - ' . $ending_time[ $os[0] ];
-							}*/
-
-
 						$hours_text = $starting_time[ $os[0] ] . ' - ' . $ending_time[ $os[0] ];
-
-
 					} else {
 						$hours_text = '<span style="color: red">' . esc_html__( 'Closed', 'cbxbusinesshours' ) . '</span>';
 					}
 					$html .= '<tr>
                 <td>' . $day_text . ':</td>
                 <td>' . $hours_text . '</td>
+                
             </tr>';
 				}
 				$html .= '</table>';
 			}
 
 		} else {
-			echo '<h4>' . esc_html__( 'No schedule set yet!', 'cbxbusinesshours' ) . '</h4>';
+			echo '<p class="inline notice-warning">' . esc_html__( 'No schedule set yet!', 'cbxbusinesshours' ) . '</p>';
 		}
 
 		return $html;
