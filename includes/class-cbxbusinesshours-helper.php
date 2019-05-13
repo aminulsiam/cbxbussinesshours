@@ -118,7 +118,10 @@ class CBXBusinessHoursHelper {
 		$timestamp = strtotime( $today );
 		$today     = strtolower( date( 'l', $timestamp ) );
 
-		return ucwords( $today ) . " : " . $office_weekdays[ $today ]['start'] . " - " . $office_weekdays[ $today ]['end'];
+		$today_start = isset($office_weekdays[ $today ]['start']) ? $office_weekdays[ $today ]['start'] : "";
+		$today_end = isset($office_weekdays[ $today ]['end']) ? $office_weekdays[ $today ]['end'] : "";
+
+		return ucwords( $today ) . " : " . $today_start . " - " . $today_end;
 
 	}
 
@@ -128,7 +131,7 @@ class CBXBusinessHoursHelper {
 	 *
 	 * @return bool
 	 *
-	 * Check date format by shortcode today @param
+	 * Check date format for given date .
 	 */
 	public static function validateDate( $date, $format = 'Y-m-d' ) {
 		$d = DateTime::createFromFormat( $format, $date );
