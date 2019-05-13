@@ -2,6 +2,11 @@
 
 class CBXBusinessHoursHelper {
 
+	/**
+	 * @return array
+	 *
+	 *  Get week long days with translation
+	 */
 	public static function getWeekLongDays() {
 		$weekdays              = array();
 		$weekdays['sunday']    = /* translators: weekday */
@@ -22,6 +27,12 @@ class CBXBusinessHoursHelper {
 		return $weekdays;
 	}//end method getWeekLongDays
 
+
+	/**
+	 * @return array
+	 *
+	 *  Get week long days keys
+	 */
 	public static function getWeekLongDayKeys() {
 		$weekdays = CBXBusinessHoursHelper::getWeekLongDays();
 
@@ -29,6 +40,11 @@ class CBXBusinessHoursHelper {
 	}//end method getWeekShortDayKeys
 
 
+	/**
+	 * @return array
+	 *
+	 *  Get week short days
+	 */
 	public static function getWeekShortDays() {
 		$weekdays        = array();
 		$weekdays['sun'] = /* translators: weekday */
@@ -49,12 +65,26 @@ class CBXBusinessHoursHelper {
 		return $weekdays;
 	}//end method getWeekShortDays
 
+
+	/**
+	 * @return array
+	 *
+	 * Get week short days keys
+	 */
 	public static function getWeekShortDayKeys() {
 		$weekdays = CBXBusinessHoursHelper::getWeekShortDays();
 
 		return array_keys( $weekdays );
 	}//end method getWeekShortDayKeys
 
+
+	/**
+	 * @param array $arr
+	 *
+	 * @return array
+	 *
+	 *  Find start days by general settings .
+	 */
 	public static function sortDaysWithFirstDayofWeek( $arr = array() ) {
 		$start_of_week   = get_option( 'start_of_week' );
 		$sliced_array    = array_slice( $arr, $start_of_week );
@@ -76,6 +106,37 @@ class CBXBusinessHoursHelper {
 
 
 	/**
+	 * @param $today
+	 * @param $office_weekdays
+	 *
+	 * @return string
+	 *
+	 * Todays day and time return by date to todays parameter by shortcode .
+	 */
+	public static function todaysDateCheck( $today, $office_weekdays ) {
+
+		$timestamp = strtotime( $today );
+		$today     = strtolower( date( 'l', $timestamp ) );
+
+		return ucwords( $today ) . " : " . $office_weekdays[ $today ]['start'] . " - " . $office_weekdays[ $today ]['end'];
+
+	}
+
+	/**
+	 * @param $date
+	 * @param string $format
+	 *
+	 * @return bool
+	 *
+	 * Check date format by shortcode today @param
+	 */
+	public static function validateDate( $date, $format = 'Y-m-d' ) {
+		$d = DateTime::createFromFormat( $format, $date );
+
+		return $d && $d->format( $format ) === $date;
+	}
+
+	/**
 	 * Returns business hours display as html
 	 *
 	 * @param $atts
@@ -89,8 +150,8 @@ class CBXBusinessHoursHelper {
 		$office_weekdays = isset( $optionValue['weekdays'] ) ? $optionValue['weekdays'] : array();
 		$exceptions      = isset( $optionValue['exceptionDay'] ) ? $optionValue['exceptionDay'] : array();
 		$compact         = isset( $atts['compact'] ) ? $atts['compact'] : 0;
-
-		//write_log($office_weekdays);
+		$time_format     = isset( $atts['time_format'] ) ? $atts['time_format'] : 24;
+		$length          = isset( $atts['length'] ) ? $atts['length'] : "long";
 
 		//Get the week first day
 		$start_of_week    = get_option( 'start_of_week' );
@@ -113,6 +174,7 @@ class CBXBusinessHoursHelper {
 				$found_day_start = isset( $exception['ex_start'] ) ? $exception['ex_start'] : '';
 				$found_day_end   = isset( $exception['ex_end'] ) ? $exception['ex_end'] : '';
 
+
 				if ( isset( $office_weekdays[ $found_day ] ) ) {
 					if ( $current_week_start_date <= $ex_date && $current_week_end_date >= $ex_date ) {
 						$office_weekdays[ $found_day ]['start'] = $found_day_start;
@@ -123,26 +185,36 @@ class CBXBusinessHoursHelper {
 		}
 
 
-		//sorting array by start of weekdays
-		$weekdays = CBXBusinessHoursHelper::getWeekLongDayKeys();
-		$weekdays = CBXBusinessHoursHelper::sortDaysWithFirstDayofWeek( $weekdays );
+		if ( ! empty( $atts['today'] ) ) {
+			if ( ! empty( $atts['today'] ) ) {
 
+				$current_date = date( 'Y-m-d' );
 
-		/*$weekdays_sorted = array();
-		foreach ( $weekdays as $value ) {
-			$weekdays_sorted[] = $office_weekdays[ $value ];
+				$today = $atts['today'] == "today" ? "today" : $atts['today'];
+
+				if ( $today == "today" ) {
+					return CBXBusinessHoursHelper::todaysDateCheck( $today, $office_weekdays );
+				} else {
+					if ( CBXBusinessHoursHelper::validateDate( $today ) && $today >= $current_date && $today < $current_week_end_date ) {
+						return CBXBusinessHoursHelper::todaysDateCheck( $today, $office_weekdays );
+					} else {
+						return "<span style='color: red;font-weight: bold'>"
+						       . esc_html__( 'Invalid input or date', 'cbxbussinesshours' ) .
+						       "</span>";
+					}
+				}
+			}
 		}
-		$office_weekdays = $weekdays_sorted;*/
 
+
+		//sorting array by start of weekdays
+		$weekdays        = CBXBusinessHoursHelper::getWeekLongDayKeys();
+		$weekdays        = CBXBusinessHoursHelper::sortDaysWithFirstDayofWeek( $weekdays );
 		$office_weekdays = CBXBusinessHoursHelper::followWithFirstDayofWeekSorted( $office_weekdays, $weekdays );
-
 
 		//starting and ending time from database
 		$starting_time = array_column( $office_weekdays, 'start' );
 		$ending_time   = array_column( $office_weekdays, 'end' );
-
-		//write_log($starting_time);
-		//write_log($ending_time);
 
 		$html = '';
 		if ( is_array( $optionValue ) ) {
@@ -182,7 +254,7 @@ class CBXBusinessHoursHelper {
 			$dow = CBXBusinessHoursHelper::followWithFirstDayofWeekSorted( $dow, $weekdays );
 
 
-			$key = ( false ) ? 'short' : 'long';
+			$key = $length;
 
 			if ( $starting_time && $ending_time ) {
 
@@ -219,7 +291,14 @@ class CBXBusinessHoursHelper {
 						$day_text = $day_text . ' - ' . $end;
 					}
 					if ( ! empty( $starting_time[ $os[0] ] ) && ! ( $starting_time[ $os[0] ] == '0:00' && $ending_time[ $os[0] ] == '0:00' ) ) {
-						$hours_text = $starting_time[ $os[0] ] . ' - ' . $ending_time[ $os[0] ];
+
+						if ( $time_format == 12 ) {
+							$hours_text = date( "g:i a", strtotime( $starting_time[ $os[0] ] ) ) . ' - ' .
+							              date( "g:i a", strtotime( $ending_time[ $os[0] ] ) );
+						} else {
+							$hours_text = $starting_time[ $os[0] ] . ' - ' . $ending_time[ $os[0] ];
+						}
+
 					} else {
 						$hours_text = '<span style="color: red">' . esc_html__( 'Closed', 'cbxbusinesshours' ) . '</span>';
 					}
@@ -231,7 +310,6 @@ class CBXBusinessHoursHelper {
 				}
 				$html .= '</table>';
 			}
-
 		} else {
 			echo '<p class="inline notice-warning">' . esc_html__( 'No schedule set yet!', 'cbxbusinesshours' ) . '</p>';
 		}

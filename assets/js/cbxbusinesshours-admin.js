@@ -8,10 +8,10 @@
         function timepicker() {
             // timepicker
             $('.timepicker').timepicker({
-                timeFormat: ''+translation['hoursformat']+':mm',
+                timeFormat: 'H:mm',
                 interval: 30,
                 maxTime: '18:00',
-                startTime: '9:00',
+                startTime: '0:00',
                 dropdown: true,
                 scrollbar: true
             });

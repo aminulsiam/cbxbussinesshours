@@ -108,7 +108,7 @@ class CbxBusinessHours_Admin {
 			), time(), true );
 
 
-			$hoursformats = get_option('cbxbusinesshours_settings');
+			/*$hoursformats = get_option('cbxbusinesshours_settings');
 
 			if(!is_array($hoursformats)) $hoursformats = array();
 
@@ -118,7 +118,7 @@ class CbxBusinessHours_Admin {
 				$hoursformat = __('h');
 			}else{
 				$hoursformat = __('H');
-			}
+			}*/
 
 			// Localize the script with translation
 			$translation_placeholder = array(
@@ -127,7 +127,7 @@ class CbxBusinessHours_Admin {
 				'start'   => __( 'Start', 'cbxbusinesshours' ),
 				'end'     => __( 'End', 'cbxbusinesshours' ),
 				'subject' => __( 'Subject', 'cbxbusinesshours' ),
-				'hoursformat' => $hoursformat
+				//'hoursformat' => $hoursformat
 			);
 			wp_localize_script( 'cbxbusinesshours-admin', 'translation', $translation_placeholder );
 
@@ -198,18 +198,7 @@ class CbxBusinessHours_Admin {
 						1 => esc_html__( 'Compact', 'cbxbusinesshours' )
 					),
 					'default' => 0
-				),
-				array(
-					'name'    => 'hoursformat',
-					'label'   => esc_html__( 'Time Format', 'cbxbusinesshours' ),
-					'type'    => 'select',
-					'options' => array(
-						24 => esc_html__( '24 hours', 'cbxbusinesshours' ),
-						12 => esc_html__( '12 hours', 'cbxbusinesshours' )
-					),
-					'default' => 24
 				)
-
 			)
 		);
 
