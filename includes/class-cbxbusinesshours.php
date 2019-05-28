@@ -111,6 +111,37 @@ class CBXBusinessHours
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cbxbusinesshours-i18n.php';
 
+	    /**
+	     * Setting Class Api will be helpful for creating options page setting section
+	     */
+	    require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cbxbusinesshours-settings.php';
+
+	    /**
+	     * Helper class
+	     */
+	    require_once plugin_dir_path(dirname(__FILE__)) . 'includes/cbxbusinesshours-functions.php';
+	    require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cbxbusinesshours-helper.php';
+
+
+	    /**
+	     * Front end display widgets file
+	     */
+	    require_once plugin_dir_path(dirname(__FILE__)) . 'widgets/class-cbxbusinesshour-front_widget.php';
+
+
+
+	    /**
+	     * Dashboard widget class
+	     */
+	    require_once plugin_dir_path(dirname(__FILE__)) . 'widgets/class-cbxbusinesshour-dashboard-widget.php';
+
+	    /**
+	     * Custom Elementor widget for cbx business hours plugin
+	     */
+
+	    //require_once plugin_dir_path(dirname(__FILE__)) . 'widgets/class-cbxbusinesshours-elementor.php';
+
+
         /**
          * The class responsible for defining all actions that occur in the admin area.
          */
@@ -122,33 +153,13 @@ class CBXBusinessHours
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-cbxbusinesshours-public.php';
 
-        $this->loader = new CBXBusinessHours_Loader();
 
-        /**
-         * Setting Class Api will be helpful for creating options page setting section
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cbxbusinesshours-settings.php';
 
-        /**
-         * Front end display widgets file
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'widgets/class-cbxbusinesshour-front_widget.php';
 
-        /**
-         * Helper class
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cbxbusinesshours-helper.php';
 
-        /**
-         * Dashboard widget class
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'widgets/class-cbxbusinesshour-dashboard-widget.php';
 
-        /**
-         * Custom Elementor widget for cbx business hours plugin
-         */
 
-        require_once plugin_dir_path(dirname(__FILE__)) . 'widgets/class-cbxbusinesshours-elementor.php';
+	    $this->loader = new CBXBusinessHours_Loader();
 
     }
 
@@ -179,14 +190,17 @@ class CBXBusinessHours
         $dashboard_widget = new CBXBusinessHoursDashboard();
         $plugin_admin = new CbxBusinessHours_Admin($this->get_plugin_name(), $this->get_version());
 
+	    $this->loader->add_action('admin_menu', $plugin_admin, 'admin_menu');
+	    $this->loader->add_action('admin_init', $plugin_admin, 'settings_init');
+
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
-        $this->loader->add_action('admin_menu', $plugin_admin, 'admin_menu');
-        $this->loader->add_action('admin_init', $plugin_admin, 'settings_init');
+
         //$this->loader->add_action('admin_init', $dashboard_widget, 'register_widget');
 
         $this->loader->add_action('wp_dashboard_setup', $dashboard_widget, 'CBXBusinessHours_dashboard_widget');
 
+        //$this->loader->add_action('init', $plugin_admin, 'gutenberg_blocks_init');
     }
 
     /**
@@ -228,6 +242,11 @@ class CBXBusinessHours
 
 	    $this->loader->add_action('init', $plugin_public, 'init_shortcodes');
 	    $this->loader->add_action('widgets_init', $plugin_public, 'init_register_widgets');
+
+	    //elementor
+	    $this->loader->add_action( 'elementor/init',$plugin_public, 'init_elementor_widgets' );
+	    $this->loader->add_action('elementor/editor/before_enqueue_scripts', $plugin_public, 'elementor_icon_loader', 99999);
+
     }// end of define_public_hooks methods
 
     /**

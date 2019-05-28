@@ -1,0 +1,78 @@
+/** WordPress 3.8 Fix **/
+.form-table th {
+	padding: 20px 10px;
+}
+
+#wpbody-content .metabox-holder {
+	padding-top: 5px;
+}
+
+.chosen-container-single, .chosen-container-multi {
+	min-width: 244px !important;
+}
+
+#poststuff h2.nav-tab-wrapper {
+	margin-bottom: 0px !important;
+	padding-bottom: 0px;;
+}
+
+.nav-tab-active, .nav-tab-active:hover {
+	background: #fff !important;
+}
+
+.nav-tab-active, .nav-tab-active:focus, .nav-tab-active:focus:active, .nav-tab-active:hover, .postbox {
+	border-top: 2px solid #0085ba;
+}
+
+h3.setting_heading_title, h4.setting_heading_subtitle {
+	background: url('../images/heading-img.png') center center repeat-x;
+	margin-top: 0px;
+}
+
+.select2-container{
+	width: 100% !important;
+}
+
+.multicheck_fields{
+
+}
+
+.multicheck_fields .multicheck_field{}
+.multicheck_fields .multicheck_field label{
+	margin-top: 0px !important;
+}
+.multicheck_fields .multicheck_field .multicheck_field_handle{
+	margin-right: 20px;
+	cursor: pointer;
+}
+.multicheck_fields .multicheck_field_placeholder{
+	outline: 1px dashed #000;
+	height: 30px;
+}
+
+.one_col_field_title{
+	margin-bottom: 10px !important;
+	font-weight: bold;
+}
+.weekdays_day{
+	clear: both;
+	margin-bottom: 5px;
+}
+.weekdays_day_label{
+	float: left;
+	display: inline-block;
+	text-align: left;
+	width: 120px;
+
+}
+.weekdays_day_fields {
+	float: left;
+	display: inline-block;
+	text-align: left;
+
+}
+.weekdays_day_fields .regular-text {
+	float: left;
+	display: inline-block;
+	max-width: 120px;
+}

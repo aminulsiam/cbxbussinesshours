@@ -8,7 +8,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       CBX Office Opening & Business Hours
- * Plugin URI:        https://codeboxr.com
+ * Plugin URI:        https://codeboxr.com/product/cbx-office-opening-business-hours-for-wordpress/
  * Description:       Office opening and close time or business hours display
  * Version:           1.0.0
  * Author:            Codeboxr
@@ -54,7 +54,7 @@ function deactivate_cbxbusinesshours()
 
 register_activation_hook(__FILE__, 'activate_cbxbusinesshours');
 register_deactivation_hook(__FILE__, 'deactivate_cbxbusinesshours');
-//register_uninstall_hook(__FILE__, 'uninstall_cbxbusinesshours');
+
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.

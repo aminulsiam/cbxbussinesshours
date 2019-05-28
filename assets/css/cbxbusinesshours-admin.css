@@ -3,21 +3,21 @@
  * included in this file.
  */
 
-.labels{
-    display: inline-block;
-    text-align: right;
-    width: 10%;
-    padding: 5px;
+.cbxbusinesshours_display{
+
 }
-.rightTab {
-    display: inline-block;
-    text-align: left;
-    width: 48%;
-    padding: 10px;
+
+.cbxbusinesshours_display_week{
+
 }
-.input-field {
-    height: 40px;
-    padding: 12px;
-    margin: 10px;
-    border: 0;
+
+.cbxbusinesshours_display_today{
+
+}
+
+.cbxbusinesshours_display_today_closed{
+    color: red;
+}
+.cbxbusinesshours_display_week_closed{
+    color: red;
 }

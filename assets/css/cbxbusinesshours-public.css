@@ -2,3 +2,22 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.cbxbusinesshours_display{
+
+}
+
+.cbxbusinesshours_display_week{
+
+}
+
+.cbxbusinesshours_display_today{
+
+}
+
+.cbxbusinesshours_display_today_closed{
+	color: red;
+}
+.cbxbusinesshours_display_week_closed{
+	color: red;
+}

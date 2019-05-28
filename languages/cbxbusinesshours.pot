@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CBX Office Opening & Business Hours\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-28 06:32+0000\n"
+"POT-Creation-Date: 2019-05-19 08:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,141 +15,330 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.2.2; wp-5.1.1"
 
-#: admin/class-cbxbusinesshours-admin.php:110
-msgid "Office Opening & Business Hours"
-msgstr ""
-
-#: admin/class-cbxbusinesshours-admin.php:110
-msgid "Office Business Hours"
-msgstr ""
-
-#: admin/class-cbxbusinesshours-admin.php:129
-msgid "Manage Hours"
+#: admin/class-cbxbusinesshours-admin.php:132
+#: includes/class-cbxbusinesshours-settings.php:626
+msgid "Remove"
 msgstr ""
 
 #: admin/class-cbxbusinesshours-admin.php:133
-msgid "Settings"
+#: includes/class-cbxbusinesshours-settings.php:613
+msgid "Date"
 msgstr ""
 
-#: admin/class-cbxbusinesshours-admin.php:145
-#: includes/class-cbxbusinesshours-helper.php:19
-msgid "Sunday"
+#: admin/class-cbxbusinesshours-admin.php:134
+#: includes/class-cbxbusinesshours-settings.php:616
+msgid "Start"
 msgstr ""
 
-#: admin/class-cbxbusinesshours-admin.php:150
-#: includes/class-cbxbusinesshours-helper.php:20
-msgid "Monday"
+#: admin/class-cbxbusinesshours-admin.php:135
+#: includes/class-cbxbusinesshours-settings.php:619
+msgid "End"
 msgstr ""
 
-#: admin/class-cbxbusinesshours-admin.php:155
-#: includes/class-cbxbusinesshours-helper.php:21
-msgid "Tuesday"
-msgstr ""
-
-#: admin/class-cbxbusinesshours-admin.php:160
-#: includes/class-cbxbusinesshours-helper.php:22
-msgid "Wednesday"
-msgstr ""
-
-#: admin/class-cbxbusinesshours-admin.php:165
-#: includes/class-cbxbusinesshours-helper.php:23
-msgid "Thursday"
+#: admin/class-cbxbusinesshours-admin.php:136
+#: includes/class-cbxbusinesshours-settings.php:622
+msgid "Subject"
 msgstr ""
 
 #: admin/class-cbxbusinesshours-admin.php:170
-#: includes/class-cbxbusinesshours-helper.php:24
-msgid "Friday"
+msgid "Office Opening & Business Hours"
 msgstr ""
 
-#: admin/class-cbxbusinesshours-admin.php:175
-#: includes/class-cbxbusinesshours-helper.php:25
-msgid "Saturday"
+#: admin/class-cbxbusinesshours-admin.php:170
+msgid "Office Business Hours"
 msgstr ""
 
-#: admin/class-cbxbusinesshours-admin.php:182
+#: admin/class-cbxbusinesshours-admin.php:192
+msgid "Manage Hours"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:196
+msgid "Settings"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:252
+msgid "Week Days"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:258
+msgid "Exception Days / Holiday"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:267
 msgid "Default Display Mode"
 msgstr ""
 
-#: admin/class-cbxbusinesshours-admin.php:185
+#: admin/class-cbxbusinesshours-admin.php:270
 msgid "Normal"
 msgstr ""
 
-#: admin/class-cbxbusinesshours-admin.php:186
+#: admin/class-cbxbusinesshours-admin.php:271
 msgid "Compact"
 msgstr ""
 
-#: includes/class-cbxbusinesshours-helper.php:19
+#: admin/class-cbxbusinesshours-admin.php:277
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:98
+msgid "Time Format"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:280
+msgid "24 Hour"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:281
+msgid "12 Hour"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:287
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:112
+msgid "Day Name Format"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:290
+msgid "Long Name(Example: Sunday)"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:291
+msgid "Short Name(Example: Sun)"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:297
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:126
+msgid "Opening Days Display"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:300
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:187
+#: widgets/class-cbxbusinesshour-front_widget.php:109
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:131
+msgid "Current Week(7 days)"
+msgstr ""
+
+#: admin/class-cbxbusinesshours-admin.php:301
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:188
+#: widgets/class-cbxbusinesshour-front_widget.php:110
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:132
+msgid "Today/For Current Date"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:12
+msgid "Sunday"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:13
 msgid "Sun"
 msgstr ""
 
-#: includes/class-cbxbusinesshours-helper.php:20
+#: includes/class-cbxbusinesshours-helper.php:16
+msgid "Monday"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:17
 msgid "Mon"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:20
+msgid "Tuesday"
 msgstr ""
 
 #: includes/class-cbxbusinesshours-helper.php:21
 msgid "Tue"
 msgstr ""
 
-#: includes/class-cbxbusinesshours-helper.php:22
-msgid "Wed"
-msgstr ""
-
-#: includes/class-cbxbusinesshours-helper.php:23
-msgid "Thu"
-msgstr ""
-
 #: includes/class-cbxbusinesshours-helper.php:24
-msgid "Fri"
+msgid "Wednesday"
 msgstr ""
 
 #: includes/class-cbxbusinesshours-helper.php:25
+msgid "Wed"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:28
+msgid "Thursday"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:29
+msgid "Thu"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:32
+msgid "Friday"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:33
+msgid "Fri"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:36
+msgid "Saturday"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:37
 msgid "Sat"
 msgstr ""
 
-#: includes/class-cbxbusinesshours-helper.php:63
+#: includes/class-cbxbusinesshours-helper.php:292
+msgid "The date has already passed"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:299
+msgid "Invalid Date"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-helper.php:353
+#: includes/class-cbxbusinesshours-helper.php:433
 msgid "Closed"
 msgstr ""
 
-#: includes/class-cbxbusinesshours-helper.php:73
-msgid "No schedule set yet!"
+#: includes/class-cbxbusinesshours-settings.php:557
+msgid "Week Days(Time in 24 hour format)"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-settings.php:570
+msgid "Opening Time"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-settings.php:572
+msgid "Ending Time"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-settings.php:574
+msgid "Reset Day"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-settings.php:575
+msgid "Copy to All"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-settings.php:582
+msgid "Reset(Empty) All Days"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-settings.php:606
+msgid "Exception Days / Holiday(Time in 24 hour format)"
+msgstr ""
+
+#: includes/class-cbxbusinesshours-settings.php:639
+msgid "Remove All Exception"
 msgstr ""
 
 #. Name of the plugin
-#: widgets/class-cbxbusinesshour-dashboard-widget.php:21
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:26
 msgid "CBX Office Opening & Business Hours"
 msgstr ""
 
-#: widgets/class-cbxbusinesshour-dashboard-widget.php:67
-msgid "Following users can watch the schedule"
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:121
+msgid "Which user role can see the widget"
 msgstr ""
 
-#: widgets/class-cbxbusinesshour-front_widget.php:8
-msgid "CBX Business Hours"
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:132
+#: widgets/class-cbxbusinesshour-front_widget.php:50
+msgid "Display Mode:"
 msgstr ""
 
-#: widgets/class-cbxbusinesshour-front_widget.php:9
-msgid "CBX Business Hours Overview"
-msgstr ""
-
-#: widgets/class-cbxbusinesshour-front_widget.php:15
-#: widgets/class-cbxbusinesshour-front_widget.php:45
-msgid "Business Hours"
-msgstr ""
-
-#: widgets/class-cbxbusinesshour-front_widget.php:18
-msgid "Title : "
-msgstr ""
-
-#: widgets/class-cbxbusinesshour-front_widget.php:22
-msgid "Display Mode : "
-msgstr ""
-
-#: widgets/class-cbxbusinesshour-front_widget.php:26
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:137
+#: widgets/class-cbxbusinesshour-front_widget.php:56
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:89
 msgid "Plain Table"
 msgstr ""
 
-#: widgets/class-cbxbusinesshour-front_widget.php:27
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:138
+#: widgets/class-cbxbusinesshour-front_widget.php:57
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:90
 msgid "Compact Table"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:149
+#: widgets/class-cbxbusinesshour-front_widget.php:68
+msgid "Time Format:"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:153
+#: widgets/class-cbxbusinesshour-front_widget.php:73
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:103
+msgid "24 hours"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:154
+#: widgets/class-cbxbusinesshour-front_widget.php:74
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:104
+msgid "12 hours"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:166
+#: widgets/class-cbxbusinesshour-front_widget.php:86
+msgid "Day Name Format:"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:170
+#: widgets/class-cbxbusinesshour-front_widget.php:91
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:117
+msgid "Long"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:171
+#: widgets/class-cbxbusinesshour-front_widget.php:92
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:118
+msgid "Short"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:183
+#: widgets/class-cbxbusinesshour-front_widget.php:104
+msgid "Opening Days Display:"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:199
+#: widgets/class-cbxbusinesshour-front_widget.php:121
+msgid "Custom Date:"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-dashboard-widget.php:204
+#: widgets/class-cbxbusinesshour-front_widget.php:127
+#, php-format
+msgid "Date format: %s"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-front_widget.php:16
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:35
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:76
+msgid "CBX Business Hours"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-front_widget.php:17
+msgid "CBX Business Hours Overview"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-front_widget.php:28
+#: widgets/class-cbxbusinesshour-front_widget.php:139
+msgid "Business Hours"
+msgstr ""
+
+#: widgets/class-cbxbusinesshour-front_widget.php:43
+msgid "Title:"
+msgstr ""
+
+#: templates/admin/setting.php:20
+msgid "CBX Office Opening & Business Hours: Global Setting"
+msgstr ""
+
+#: templates/admin/sidebar.php:22
+msgid "Help & Supports"
+msgstr ""
+
+#: templates/admin/sidebar.php:30
+msgid "Codeboxr Updates"
+msgstr ""
+
+#: templates/admin/sidebar.php:57
+msgid "Other Wordpress Plugins"
+msgstr ""
+
+#: templates/admin/sidebar.php:87
+msgid "Codeboxr on facebook"
+msgstr ""
+
+#: widgets/elementor-elements/class-cbxbusinesshours-elementor.php:84
+msgid "Display Mode"
 msgstr ""
 
 #. Description of the plugin
@@ -157,10 +346,15 @@ msgid "Office opening and close time or business hours display"
 msgstr ""
 
 #. URI of the plugin
-#. Author URI of the plugin
-msgid "https://codeboxr.com"
+msgid ""
+"https://codeboxr.com/product/cbx-office-opening-business-hours-for-wordpress/"
 msgstr ""
 
 #. Author of the plugin
 msgid "Codeboxr"
+msgstr ""
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://codeboxr.com"
 msgstr ""
